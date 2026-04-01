@@ -1,11 +1,11 @@
-require('dotenv').config({ path: '/root/.openclaw/workspace/skills/chessnut-support/.env' });
+require('dotenv').config({ path: __dirname + '/.env' });
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
 const FD_DOMAIN = process.env.FRESHDESK_DOMAIN;
 const FD_API_KEY = process.env.FRESHDESK_API_KEY;
-const TRACK_API_KEY = process.env['17TRACK_API_KEY'];
+const TRACK_API_KEY = process.env.TRACK17_API_KEY;
 
 const fdApi = axios.create({
   baseURL: `https://${FD_DOMAIN}/api/v2/`,
@@ -20,7 +20,7 @@ const trackApi = axios.create({
   }
 });
 
-const TRACKING_FILE = '/root/.openclaw/workspace/memory/pending_tracking.json';
+const TRACKING_FILE = path.join(__dirname, '..', '..', 'memory', 'pending_tracking.json');
 
 async function addFreshdeskNote(ticketId, body, isPrivate = true) {
   try {
@@ -86,7 +86,7 @@ async function runSentinel() {
         console.log(`-> Found active shipping update: ${latestEvent}`);
         const noteBody = `<b>[Logistics Alert]</b><br/><br/>Tracking Number: <b>${trackingNumber}</b><br/>Latest Status: ${latestEvent}<br/><br/><i>The package is moving. You can inform the customer.</i>`;
         
-        await fdFreshdeskNote(ticketId, noteBody, true);
+        await addFreshdeskNote(ticketId, noteBody, true);
         
         // Add a special tag so the user can filter them in Freshdesk
         try {

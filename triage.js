@@ -1,8 +1,9 @@
+require('dotenv').config({ path: __dirname + '/.env' });
 const fs = require('fs');
 const https = require('https');
 
-const API_KEY = 'Wj5RRspS8Z8yXiGjqQpu';
-const DOMAIN = 'chessnutech.freshdesk.com';
+const API_KEY = process.env.FRESHDESK_API_KEY;
+const DOMAIN = process.env.FRESHDESK_DOMAIN;
 const AUTH = 'Basic ' + Buffer.from(API_KEY + ':X').toString('base64');
 
 // 从先前的系统中提取出的真实 Agent IDs
@@ -46,7 +47,6 @@ function request(path, method = 'GET', data = null) {
 async function run() {
   const eightHoursAgo = new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString();
   console.log(`Fetching tickets updated since ${eightHoursAgo}...`);
-  // include=description 用于获取详细正文以便精准判断
   const tickets = await request(`/tickets?updated_since=${eightHoursAgo}&include=description`);
   
   if (tickets.error || !Array.isArray(tickets)) {
@@ -56,30 +56,100 @@ async function run() {
   
   console.log(`Fetched ${tickets.length} tickets. Beginning triage...`);
   
-  let jonyJenniferTurn = 0; // 轮询计数器
+  let jonyJenniferTurn = 0;
 
   for (const ticket of tickets) {
-    if (ticket.status === 5) continue; // 已经是 Closed 状态的直接跳过
+    if (ticket.status === 5) continue;
     
-    // 合并标题和正文进行关键词分析 (转小写)
+    // 提取正文：优先 description_text，回退 description（可能是 HTML），去除 HTML 标签
+    let bodyText = ticket.description_text || '';
+    if (!bodyText && ticket.description) {
+      bodyText = ticket.description.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');
+    }
+    const cleanBody = bodyText.replace(/\s+/g, ' ').trim();
+    const subjectLower = (ticket.subject || '').toLowerCase();
+    const bodyLower = cleanBody.toLowerCase();
+    // 合并用于关键词匹配（标题+正文）
+    const textToAnalyze = subjectLower + " " + bodyLower;
     
-    
-    
-    const textToAnalyze = (ticket.subject + " " + (ticket.description_text || "")).toLowerCase();
+    // 正文截取前 500 字符用于日志（调试用）
+    const bodyPreview = cleanBody.substring(0, 500);
 
     // -------------------------------------------------------------
-    // 【第一关】Spam 拦截规则：系统自动发送的无价值通知
+    // 【第一关】Spam 拦截（分两层：确认关闭 + 建议关闭）
+    // 原则：不确定的绝不关闭，宁可放过
     // -------------------------------------------------------------
-    if (/(order confirmed|has shipped|new message from|delivery failed|receipt|payment received)/i.test(textToAnalyze) || 
-        /(solopreneur sale|public terms application|matter intake processing|best deals|gpu power|obsessed|catalog submission|security review|unfulfillable)/i.test(textToAnalyze) ||
-        /(authorized a payment|billing agreement|subscribed to.+reminder)/i.test(textToAnalyze) ||
-        /mailchimp/i.test(textToAnalyze) || 
-        /(e-mail an|e-mail a |valida tu direcci.n|vorbereitung auf die neue|refund initiated|va.i z.silku)/i.test(textToAnalyze) ||
-        /(退信|包裹已經送達|運單.*收據|運單派送延誤|卖家未发货订单关闭|预扣罚单|全球速卖通客户满意中心|福利等你领取|系统通知)/i.test(textToAnalyze) ||
-        /(unsubscribe|reset your password|please rate|no-reply|do not reply|auto-reply)/i.test(textToAnalyze)) {
-        
-        console.log(`Ticket #${ticket.id} - SPAM/SYSTEM NOTICE detected -> Closing.`);
+
+    // ===== 硬关闭：精确匹配，100% 确定是垃圾/系统通知 =====
+    const isHardSpam = (
+      // Mailchimp 精确标题
+      /mailchimp audience export complete/i.test(textToAnalyze) ||
+      /mailchimp account is closed/i.test(textToAnalyze) ||
+      /mailchimp order processing/i.test(textToAnalyze) ||
+      // PayPal 收款通知（非争议）
+      /notification of payment received/i.test(textToAnalyze) ||
+      /has authorized a payment to you/i.test(textToAnalyze) ||
+      /billing agreement.*change to/i.test(textToAnalyze) ||
+      // 纯广告（标题精确匹配）
+      /our solopreneur sale is live/i.test(textToAnalyze) ||
+      /reveal the day.s best deals/i.test(textToAnalyze) ||
+      /need gpu power to scale up your ai startups/i.test(textToAnalyze) ||
+      /obsessed/i.test(textToAnalyze) && /deal|offer|discount|shop/i.test(textToAnalyze) ||
+      // 验证码/自动回复
+      /tiktok.*验证码/i.test(textToAnalyze) ||
+      /^(验证码|verification code)/i.test(ticket.subject) ||
+      // 订阅通知
+      /subscribed to.*move order reminder/i.test(textToAnalyze) ||
+      // 公共条款
+      /public terms application/i.test(textToAnalyze) ||
+      // 诈骗
+      /matter intake processing started.*ref.*att-req/i.test(textToAnalyze) ||
+      // impact 产品目录
+      /impact.*product catalog/i.test(textToAnalyze) ||
+      // 网站好评通知
+      /left a \d star review for/i.test(textToAnalyze) ||
+      // 订单处理/延误通知（系统自动）
+      /mailchimp order processing notification/i.test(textToAnalyze) ||
+      // KS 信息通知
+      /^KS信息通知/i.test(ticket.subject) ||
+      // 页面关闭通知
+      /页面关闭通知/i.test(textToAnalyze)
+    );
+
+    if (isHardSpam) {
+        console.log(`Ticket #${ticket.id} - HARD SPAM -> Closing.`);
         await request(`/tickets/${ticket.id}`, 'PUT', { status: 5, tags: [...(ticket.tags||[]), 'auto-spam-closed'] });
+        continue;
+    }
+
+    // ===== 软关闭：可能是垃圾，不确定，打建议关闭 tag =====
+    const isSoftSpam = (
+      // Amazon 通知（可能有客户真的在问 Amazon 订单问题）
+      /(amazon hat ihre|refund initiated for order|unfulfillable.*fba.*inventory|la tua e-mail a|亚马逊.*退款通知|亚马逊.*站内信息|亚马逊.*广告|亚马逊.*发货通知)/i.test(textToAnalyze) ||
+      // 速卖通通知（可能有客户投诉速卖通）
+      /(卖家未发货订单关闭|全球速卖通客户满意中心|速卖通.*通知|违背发货承诺.*预扣罚单)/i.test(textToAnalyze) ||
+      // 物流系统通知（可能有客户真的在问物流）
+      /(運單派送延誤|運單.*收據|運單.*差價|fuuffy.*收據|fuuffy.*派送|fuuffy.*通知|ppl.*z.silku|ppl.*doru.ov)/i.test(textToAnalyze) ||
+      // 广告审核
+      /广告审核通过/i.test(textToAnalyze) ||
+      // Facebook/Instagram 通知
+      /(facebook|instagram).*通知/i.test(textToAnalyze) ||
+      // 音乐版权
+      /音乐版权通知/i.test(textToAnalyze) ||
+      // 列表导出
+      /列表的.*导出通知/i.test(textToAnalyze) ||
+      /列表的导出完成/i.test(textToAnalyze) ||
+      // 退信通知
+      /退信通知/i.test(textToAnalyze) ||
+      // 订阅/自动化通知（非 Mailchimp）
+      /(set up an automation to welcome|order reminder subscription)/i.test(textToAnalyze) ||
+      // 其他模糊广告
+      /(catalog submission|security review)/i.test(textToAnalyze)
+    );
+
+    if (isSoftSpam) {
+        console.log(`Ticket #${ticket.id} - SOFT SPAM -> Tagging suggest-close (not closing).`);
+        await request(`/tickets/${ticket.id}`, 'PUT', { tags: [...(ticket.tags||[]), 'ai-suggest-close'] });
         continue;
     }
 
@@ -90,19 +160,62 @@ async function run() {
     let draftMessage = null;
     const draftTag = 'ai-draft-ready';
 
-    // JONY: 亚马逊后台通知、入库、争议、特定需求
-    if (/(dispute|will close on|wms|amazon order|inquiry)/i.test(textToAnalyze)) {
-        assigneeId = AGENTS.JONY;
-    }
-    // JENNIFER EXCEPTIONS (Message de Chessnut, Message from Chessnut)
-    else if (/(message de chessnut|message from chessnut)/i.test(textToAnalyze)) {
+    // === 优先级 1: 识别特定来源/场景 ===
+
+    // Jennifer Chen 发出的缺货邮件的回复 → Jennifer
+    // 注意：标题可能是 "Re: Message from Chessnut" 很泛，需要看正文里是否在回复缺货
+    if (/(message de chessnut|message from chessnut)/i.test(subjectLower) && 
+        /(缺货|out of stock|restock|delay|apologize.*delay|sorry.*delay|shipping.*delay|reply|回复|re:|waiting for|when will|delayed)/i.test(bodyLower)) {
         assigneeId = AGENTS.JENNIFER;
     }
-    // LENA (物流/订单大管家): 匹配物流、催单、改地址、调价等
-    else if (/(shipping|my order|address|discount|price adjustment|delay|tracking|delivery|sipping|order no|order #|order number|missing|速卖通物流|ppl)/i.test(textToAnalyze) && !/(evo|return)/i.test(textToAnalyze)) {
+    // AliExpress 物流/预售 → Jony He
+    else if (/(速卖通物流|aliexpress|无忧物流|速卖通.*发货|预售.*发货|速卖通.*order|aliexpress.*order|aliexpress.*shipping|aliexpress.*delivery)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.JONY;
+    }
+    // Amazon 后台通知、FBA、争议 → Jony He
+    else if (/(dispute|case id.*pp-|will close on|wms|amazon order|fba|delivery bee|amazon.*removal|amazon.*fba|amazon.*new inquiry)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.JONY;
+    }
+    // PayPal case → Jony He
+    else if (/(paypal.*case|pp-.*case|payoneer)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.JONY;
+    }
+
+    // === 优先级 2: 产品相关售后/技术问题 ===
+
+    // evo 退货 → Gwen Liu
+    else if (/(evo)/i.test(textToAnalyze) && /(return|replace|refund|退货|换货)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.GWEN;
+    }
+    // move 退货 → Gwen Liu
+    else if (/(move)/i.test(textToAnalyze) && /(return|replace|refund|退货|换货)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.GWEN;
+    }
+    // Gwen: EVO/MOVE 硬件故障、识别问题、充电、固件等
+    else if (/(evo|move)/i.test(textToAnalyze) && /(defective|broken|magnetized|firmware|review|star|base|charging|won't connect|recognition|not recognize|pgn|training)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.GWEN;
+        
+        if (/(defective|broken|magnetized|recognize)/i.test(textToAnalyze)) {
+            draftMessage = `Hi there,\n\nThank you for reaching out. The issue you raised is crucial for the optimization of our product.\n\nTo help us verify the issue and provide a quick solution or replacement, we kindly request you to provide us with:\n\n1. Your Original Order Number\n2. Product Serial Number (found behind/under the chessboard)\n3. A detailed photo or video of the issue clearly demonstrating the problem.\n\nPlease note: This email system only supports video attachments smaller than 20MB. If your video is larger, we recommend using viewing tools such as Google Drive or YouTube to upload it and share the public link with us.\n\nWe will analyze the footage and provide a detailed solution immediately. Thanks for your understanding and support!`;
+        } else if (/(base|charging|battery)/i.test(textToAnalyze) && /move/i.test(textToAnalyze)) {
+            draftMessage = `Hi there,\n\nThank you for your patience.\n\nRegarding your question about potentially faulty chess pieces or bases, we suggest that before we proceed with a replacement dock, you fully charge all chess pieces to check for any abnormal charging.\n\nPlease then provide a screenshot showing the battery status of each piece on the board via our App:\n- iOS: Connect chessboard -> Bluetooth connection page -> Piece power\n- Android: Connect chessboard -> Bluetooth connection page -> Piece Battery Level\n\nOnce verified, we will arrange the next steps for you immediately. We look forward to your reply.`;
+        }
+    }
+    // Go 使用问题 → Jennifer Chen
+    else if (/(chessnut go|go chess)/i.test(textToAnalyze) && /(pgn|game|otb|can't find|how to|usage|使用|玩|找不)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.JENNIFER;
+    }
+    // AIR/AIR+/PRO 产品相关 → Jennifer Chen
+    else if (/(air\+|air pro|chessnut air|chessnut pro)/i.test(textToAnalyze) && /(return|defective|broken|magnetized|firmware|review|star|base|charging|won't connect|recognition|not recognize)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.JENNIFER;
+    }
+
+    // === 优先级 3: Shopify 订单相关 → Lena Wang ===
+    // 排除速卖通/产品型号，结合标题+正文判断
+    else if (/(shopify|order #\d+|order no \d+|order number \d+|my order|status update|shipping eta|missing item|order adjustment|track|where.*order|where.*package|order.*confirmed|order.*shipped|还没收到|什么时候发货|发货时间|订单.*状态|订单.*物流|where is my|when will.*ship|has.*shipped|delivery update)/i.test(textToAnalyze) 
+             && !/(evo|move|defective|broken|aliexpress|速卖通|go)/i.test(textToAnalyze)) {
         assigneeId = AGENTS.LENA;
         
-        // 场景判断：Move 木棋子 缺货应对
         if (/(delay|when|shipping date)/i.test(textToAnalyze) && /move/i.test(textToAnalyze) && /wood/i.test(textToAnalyze)) {
             draftMessage = `Hi there,
 
@@ -117,50 +230,70 @@ If the restocking affects any of your plans, please feel free to contact us. We 
 Thank you for your understanding and support.`;
         }
     }
-    // GWEN: 负责 EVO, MOVE 等产品相关的售前售后、售后退换货、固件等技术问题
-    else if (/(evo|move)/i.test(textToAnalyze) && /(return|defective|broken|magnetized|firmware|review|star|base|charging|won\'t connect|recognition|not recognize|pgn|training)/i.test(textToAnalyze)) {
-        assigneeId = AGENTS.GWEN;
+    // 售前咨询 → Lena Wang
+    else if (/(questions before ordering|before.*order|shipping to|deliver to|退货政策|return policy|warranty|deliver to|ship to.*germany|ship to.*eu)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.LENA;
         
-        // 场景判断 (只对 Gwen 适用的硬件索要证明)
-        if (/(defective|broken|magnetized|recognize)/i.test(textToAnalyze)) {
-            draftMessage = `Hi there,\n\nThank you for reaching out. The issue you raised is crucial for the optimization of our product.\n\nTo help us verify the issue and provide a quick solution or replacement, we kindly request you to provide us with:\n\n1. Your Original Order Number\n2. Product Serial Number (found behind/under the chessboard)\n3. A detailed photo or video of the issue clearly demonstrating the problem.\n\nPlease note: This email system only supports video attachments smaller than 20MB. If your video is larger, we recommend using viewing tools such as Google Drive or YouTube to upload it and share the public link with us.\n\nWe will analyze the footage and provide a detailed solution immediately. Thanks for your understanding and support!`;
-        } else if (/(base|charging|battery)/i.test(textToAnalyze) && /move/i.test(textToAnalyze)) {
-            draftMessage = `Hi there,\n\nThank you for your patience.\n\nRegarding your question about potentially faulty chess pieces or bases, we suggest that before we proceed with a replacement dock, you fully charge all chess pieces to check for any abnormal charging.\n\nPlease then provide a screenshot showing the battery status of each piece on the board via our App:\n- iOS: Connect chessboard -> Bluetooth connection page -> Piece power\n- Android: Connect chessboard -> Bluetooth connection page -> Piece Battery Level\n\nOnce verified, we will arrange the next steps for you immediately. We look forward to your reply.`;
+        // 售前回复模板
+        if (/(questions before ordering|before.*order|thinking about|considering)/i.test(textToAnalyze)) {
+            draftMessage = `Hi there,
+
+Thank you for reaching out to Chessnut Support!
+
+Regarding your questions:
+- Stock availability: We currently have stock in our EU warehouse, so you can order anytime.
+- Shipping: Orders are typically shipped the next business day after placement. Tracking number will be updated within 1-3 business days.
+- Delivery time: Usually 3-5 business days to most EU countries.
+- Return policy: 30-day return policy. Buyer covers return shipping cost for non-defective items.
+- Warranty: All products come with our standard warranty. Extended warranty can be purchased within 30 days of your order.
+
+We hope this helps! Feel free to reach out if you have any other questions.
+
+Best regards,
+Chessnut Support Team`;
         }
     }
-    // JENNIFER: 负责 AIR, AIR+, PRO, GO 等产品相关的售前售后、售后退换货、固件等技术问题
-    else if (/(air|pro|go)/i.test(textToAnalyze) && /(return|defective|broken|magnetized|firmware|review|star|base|charging|won\'t connect|recognition|not recognize|pgn|training)/i.test(textToAnalyze)) {
-        assigneeId = AGENTS.JENNIFER;
-    }
-    // 未提及具体型号但属于退换货和技术问题的泛泛邮件分配 (默认分别平分)
-    else if (/(return|defective|broken|magnetized|firmware|review|star|base|charging|won\'t connect|recognition|not recognize|pgn|training)/i.test(textToAnalyze)) {
+
+    // === 优先级 4: 未提及具体型号的退换货/技术问题 → Gwen/Jennifer 轮询 ===
+    else if (/(return|defective|broken|magnetized|firmware|base|charging|won't connect|recognition|not recognize|pgn|training)/i.test(textToAnalyze)) {
         assigneeId = (jonyJenniferTurn % 2 === 0) ? AGENTS.GWEN : AGENTS.JENNIFER;
         jonyJenniferTurn++;
     }
-    // JENNIFER / JONY (平台客服支持与售后兜底): 其他所有工单 比如 PayPal、售前疑问
+    // 产品配件/配置咨询 → Lena Wang
+    else if (/(storage box|chess piece storage|配件|存储盒|what.*include|what.*come with|contains|product configuration)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.LENA;
+        draftMessage = `Hi there,
+
+Thank you for contacting us.
+
+Thank you so much for your support of Chessnut, and we're glad you received the premium walnut wood chess piece storage box.
+
+Regarding your question about the wooden chess pieces, please note: the premium walnut wood chess piece storage box is a separate accessory. It only includes the storage box (with charging function and status window) and does not include the wooden chess pieces. The plastic chess pieces that came with the chessboard can be stored and charged normally in this storage box, so please use them with confidence.
+
+If you still have questions about the product configuration, please feel free to contact us. We are happy to provide further assistance.
+
+We hope our reply has been helpful. Thank you again for your understanding and support!`;
+    }
+    // 兜底：其他所有工单 → Jony/Jennifer 轮询
     else {
         assigneeId = (jonyJenniferTurn % 2 === 0) ? AGENTS.JONY : AGENTS.JENNIFER;
         jonyJenniferTurn++;
     }
 
     // 执行发往 Freshdesk 的 API 操作
-
-
-
     if (assigneeId) {
         console.log(`Ticket #${ticket.id} -> Assigning to Agent ID: ${assigneeId}`);
         await request(`/tickets/${ticket.id}`, 'PUT', { responder_id: assigneeId, group_id: null });
     }
     
     if (draftMessage) {
-        console.log(`Ticket #${ticket.id} -> Adding Private Draft Note.`);
-        await request(`/tickets/${ticket.id}/notes`, 'POST', {
-            body: draftMessage,
-            private: true,
-            notify_emails: []
-        });
-        // 标记以便客服明天一眼看到
-        await request(`/tickets/${ticket.id}`, 'PUT', { tags: [...(ticket.tags||[]), draftTag] });
+      console.log(`Ticket #${ticket.id} -> Adding Private Draft Note.`);
+      await request(`/tickets/${ticket.id}/notes`, 'POST', {
+        body: draftMessage,
+        private: true,
+        notify_emails: []
+      });
+      await request(`/tickets/${ticket.id}`, 'PUT', { tags: [...(ticket.tags||[]), draftTag] });
     }
   }
   
