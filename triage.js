@@ -89,10 +89,7 @@ async function run() {
       // Mailchimp
       /@mailchimp/i.test(ticketEmail) ||
       /@mandrillapp\.com$/i.test(ticketEmail) ||
-      // PayPal 通知
-      /service@paypal/i.test(ticketEmail) ||
-      /noreply@paypal/i.test(ticketEmail) ||
-      // Amazon 系统通知
+      // PayPal 通知（收款类靠内容判断，这里不按发件人关）
       /@marketplace\.amazon/i.test(ticketEmail) ||
       /@amazon\.com$/i.test(ticketEmail) && /no-reply|noreply/i.test(ticketEmail) ||
       /@sellernotifications/i.test(ticketEmail) ||
@@ -107,10 +104,6 @@ async function run() {
       // 速卖通
       /@aliexpress\.com$/i.test(ticketEmail) && /no-reply|noreply|notification/i.test(ticketEmail) ||
       // 其他常见系统通知
-      /no-reply@.*\.aliyun\.com$/i.test(ticketEmail) ||
-      /noreply@.*\.aliyun\.com$/i.test(ticketEmail) ||
-      /no-reply@.*\.163\.com$/i.test(ticketEmail) ||
-      // Impact 合作平台
       /@impact\.com$/i.test(ticketEmail) ||
       /@mediapartners/i.test(ticketEmail)
     );
