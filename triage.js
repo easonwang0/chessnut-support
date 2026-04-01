@@ -14,6 +14,19 @@ const AGENTS = {
   JONY: 150073233500
 };
 
+// 统计计数
+const stats = {
+  total: 0,
+  hardSpam: 0,
+  softSpam: 0,
+  assigned: 0,
+  drafted: 0,
+  assigneeBreakdown: { [AGENTS.GWEN]: 0, [AGENTS.LENA]: 0, [AGENTS.JENNIFER]: 0, [AGENTS.JONY]: 0 },
+  spamDetails: [],
+  draftedTickets: [],
+  time: new Date().toISOString()
+};
+
 function request(path, method = 'GET', data = null) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -111,6 +124,8 @@ async function run() {
     if (isNotificationSender) {
         console.log(`Ticket #${ticket.id} - NOTIFICATION SENDER (${ticketEmail}) -> Closing.`);
         await request(`/tickets/${ticket.id}`, 'PUT', { status: 5, tags: [...(ticket.tags||[]), 'auto-spam-closed', 'sender-based'] });
+        stats.hardSpam++;
+        stats.total++;
         continue;
     }
 
@@ -155,6 +170,8 @@ async function run() {
     if (isHardSpam) {
         console.log(`Ticket #${ticket.id} - HARD SPAM -> Closing.`);
         await request(`/tickets/${ticket.id}`, 'PUT', { status: 5, tags: [...(ticket.tags||[]), 'auto-spam-closed'] });
+        stats.hardSpam++;
+        stats.total++;
         continue;
     }
 
@@ -186,6 +203,8 @@ async function run() {
     if (isSoftSpam) {
         console.log(`Ticket #${ticket.id} - SOFT SPAM -> Tagging suggest-close (not closing).`);
         await request(`/tickets/${ticket.id}`, 'PUT', { tags: [...(ticket.tags||[]), 'ai-suggest-close'] });
+        stats.softSpam++;
+        stats.total++;
         continue;
     }
 
@@ -407,6 +426,8 @@ Chessnut Support Team`;
     if (assigneeId) {
         console.log(`Ticket #${ticket.id} -> Assigning to Agent ID: ${assigneeId}`);
         await request(`/tickets/${ticket.id}`, 'PUT', { responder_id: assigneeId, group_id: null });
+        stats.assigned++;
+        stats.assigneeBreakdown[assigneeId] = (stats.assigneeBreakdown[assigneeId] || 0) + 1;
     }
     
     if (draftMessage) {
@@ -417,10 +438,76 @@ Chessnut Support Team`;
         notify_emails: []
       });
       await request(`/tickets/${ticket.id}`, 'PUT', { tags: [...(ticket.tags||[]), draftTag] });
+      stats.drafted++;
+      stats.draftedTickets.push(ticket.id);
     }
+    
+    if (assigneeId) stats.total++;
   }
   
   console.log("✅ Triage logic fully executed with real API payloads.");
+  
+  // 生成报告
+  const agentNames = { [AGENTS.GWEN]: 'Gwen', [AGENTS.LENA]: 'Lena', [AGENTS.JENNIFER]: 'Jennifer', [AGENTS.JONY]: 'Jony' };
+  const breakdownStr = Object.entries(stats.assigneeBreakdown)
+    .filter(([_, v]) => v > 0)
+    .map(([k, v]) => `${agentNames[k] || k}: ${v}`)
+    .join(', ');
+  
+  const report = `📊 Chessnut 工单分诊报告
+⏰ ${new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' })}
+
+处理工单: ${stats.total} 张
+❌ 硬关闭 (确认垃圾): ${stats.hardSpam} 张
+🏷️ 软标签 (建议关闭): ${stats.softSpam} 张
+📝 指派给客服: ${stats.assigned} 张
+✍️ 自动起草回复: ${stats.drafted} 张
+
+指派分布: ${breakdownStr || '无'}
+${stats.draftedTickets.length > 0 ? '起草工单: #' + stats.draftedTickets.join(', #') : ''}`;
+
+  console.log('\n' + report);
+  
+  // 写入报告文件（供其他程序读取）
+  fs.writeFileSync('/tmp/chessnut-triage-report.txt', report);
+  
+  // 通过飞书 API 发送报告
+  try {
+    const appId = 'cli_a94667ee4ffa9cd4';
+    const appSecret = 'LZH0xS73OGkUMOyk75QDFcatKqyuMhKu';
+    
+    // 获取 tenant_access_token
+    const tokenRes = await fetch('https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ app_id: appId, app_secret: appSecret })
+    });
+    const tokenData = await tokenRes.json();
+    const token = tokenData.tenant_access_token;
+    
+    // 发送消息给 owner (Kyle)
+    const ownerId = process.env.OWNER_OPEN_ID || 'ou_c77bf01311e8aa4491d412be5b1139f5';
+    const msgRes = await fetch('https://open.feishu.cn/open-apis/im/v1/messages?receive_id_type=open_id', {
+      method: 'POST',
+      headers: { 
+        'Authorization': 'Bearer ' + token, 
+        'Content-Type': 'application/json' 
+      },
+      body: JSON.stringify({
+        receive_id: ownerId,
+        msg_type: 'text',
+        content: JSON.stringify({ text: report })
+      })
+    });
+    const msgData = await msgRes.json();
+    if (msgData.code === 0) {
+      console.log('📤 Report sent to Feishu successfully.');
+    } else {
+      console.log('⚠️ Failed to send report:', msgData.msg);
+    }
+  } catch (e) {
+    console.log('⚠️ Failed to send report to Feishu:', e.message);
+  }
 }
 
 run().catch(console.error);
