@@ -80,6 +80,47 @@ async function run() {
     // 原则：不确定的绝不关闭，宁可放过
     // -------------------------------------------------------------
 
+    // ===== 发件人级别硬关闭：这些发件人发的邮件都是系统通知 =====
+    const ticketEmail = (ticket.requester_email || ticket.email || '').toLowerCase();
+    const isNotificationSender = (
+      // Shopify 系统通知
+      /@mailer\.shopify\.com$/i.test(ticketEmail) ||
+      /@shopify\.com$/i.test(ticketEmail) && /no-reply|noreply|notification/i.test(ticketEmail) ||
+      // Mailchimp
+      /@mailchimp/i.test(ticketEmail) ||
+      /@mandrillapp\.com$/i.test(ticketEmail) ||
+      // PayPal 通知
+      /service@paypal/i.test(ticketEmail) ||
+      /noreply@paypal/i.test(ticketEmail) ||
+      // Amazon 系统通知
+      /@marketplace\.amazon/i.test(ticketEmail) ||
+      /@amazon\.com$/i.test(ticketEmail) && /no-reply|noreply/i.test(ticketEmail) ||
+      /@sellernotifications/i.test(ticketEmail) ||
+      // Meta/Facebook 广告通知
+      /@facebookmail\.com$/i.test(ticketEmail) ||
+      /@support\.facebook\.com$/i.test(ticketEmail) ||
+      /notification@facebook/i.test(ticketEmail) ||
+      // 物流系统通知
+      /@fuuffy\.com$/i.test(ticketEmail) ||
+      /@pplcz\.com$/i.test(ticketEmail) ||
+      /@ppl-pk\.com$/i.test(ticketEmail) ||
+      // 速卖通
+      /@aliexpress\.com$/i.test(ticketEmail) && /no-reply|noreply|notification/i.test(ticketEmail) ||
+      // 其他常见系统通知
+      /no-reply@.*\.aliyun\.com$/i.test(ticketEmail) ||
+      /noreply@.*\.aliyun\.com$/i.test(ticketEmail) ||
+      /no-reply@.*\.163\.com$/i.test(ticketEmail) ||
+      // Impact 合作平台
+      /@impact\.com$/i.test(ticketEmail) ||
+      /@mediapartners/i.test(ticketEmail)
+    );
+
+    if (isNotificationSender) {
+        console.log(`Ticket #${ticket.id} - NOTIFICATION SENDER (${ticketEmail}) -> Closing.`);
+        await request(`/tickets/${ticket.id}`, 'PUT', { status: 5, tags: [...(ticket.tags||[]), 'auto-spam-closed', 'sender-based'] });
+        continue;
+    }
+
     // ===== 硬关闭：精确匹配，100% 确定是垃圾/系统通知 =====
     const isHardSpam = (
       // Mailchimp 精确标题
