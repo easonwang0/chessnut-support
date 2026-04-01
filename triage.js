@@ -110,6 +110,8 @@ async function run() {
       /left a \d star review for/i.test(textToAnalyze) ||
       // 订单处理/延误通知（系统自动）
       /mailchimp order processing notification/i.test(textToAnalyze) ||
+      // Shopify 系统通知
+      /no-reply@mailer\.shopify\.com/i.test(textToAnalyze) ||
       // KS 信息通知
       /^KS信息通知/i.test(ticket.subject) ||
       // 页面关闭通知
@@ -210,8 +212,107 @@ async function run() {
         assigneeId = AGENTS.JENNIFER;
     }
 
-    // === 优先级 3: Shopify 订单相关 → Lena Wang ===
-    // 排除速卖通/产品型号，结合标题+正文判断
+    // === 优先级 3: 退货/退款（在订单匹配之前）===
+    else if (/(return|refund|remboursement|retour|退货|退款|cancel.*order)/i.test(textToAnalyze) && !/(defective|broken|faulty)/i.test(textToAnalyze)) {
+        if (/(evo|move)/i.test(textToAnalyze)) assigneeId = AGENTS.GWEN;
+        else assigneeId = AGENTS.LENA;
+        
+        draftMessage = `Hi there,
+
+Thank you for reaching out to Chessnut Support.
+
+We understand that you would like to initiate a return. We're sorry to hear that the product didn't meet your expectations.
+
+Before proceeding, we'd like to mention that many issues can be resolved through troubleshooting. If you're experiencing any technical difficulties, we'd be happy to help you resolve them first.
+
+If you still wish to proceed with the return, please note:
+- We offer a 30-day return policy
+- The product should be in its original packaging
+- Buyer covers return shipping cost for non-defective items
+
+Please provide us with:
+1. Your order number
+2. Reason for the return
+
+Once we receive this information, we will provide you with the return address and further instructions.
+
+We look forward to your reply.
+
+Best regards,
+Chessnut Support Team`;
+    }
+    // 长期未发货投诉
+    else if (/(still waiting|still awaiting|months ago|placed.*order.*ago|ordered.*ago.*not|haven't received|still no|long time)/i.test(textToAnalyze) && /(order|ship)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.LENA;
+        draftMessage = `Hi there,
+
+Thank you for reaching out, and we sincerely apologize for the extended delay.
+
+We understand how frustrating it must be to wait this long, and we take your concern very seriously. We are currently checking the status of your order with our fulfillment team.
+
+We will follow up with you as soon as we have an update on your shipment. If you would prefer to cancel your order for a full refund instead, please let us know and we will process it immediately.
+
+Again, we apologize for the inconvenience and appreciate your patience.
+
+Best regards,
+Chessnut Support Team`;
+    }
+    // 产品功能咨询
+    else if (/(do the pieces move|electronic board|play against|how does it work|how does.*work|what is chessnut|tell me about)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.LENA;
+        draftMessage = `Hi there,
+
+Thank you for your interest in Chessnut!
+
+Chessnut offers electronic chessboards that connect to online chess platforms. Here's a quick overview:
+
+- Chessnut Air/Air+/Pro/Go: Electronic boards that let you play online chess with LED move indicators. You need a phone/tablet/PC to connect to Chess.com or Lichess. The pieces do NOT move automatically — you move them manually, and the board detects your moves.
+
+- Chessnut Evo: An all-in-one device with built-in AI (MAIA). You can play against AI directly on the board, no external device needed.
+
+- Chessnut Move: A robotic board where pieces move automatically!
+
+You can learn more and shop at: https://www.chessnutech.com
+
+Feel free to ask if you have any other questions!
+
+Best regards,
+Chessnut Support Team`;
+    }
+    // 运费/配送费咨询
+    else if (/(shipping cost|shipping fee|how much.*ship|delivery cost|运费|配送费)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.LENA;
+        draftMessage = `Hi there,
+
+Thank you for your interest in Chessnut!
+
+Shipping costs depend on your location and will be calculated at checkout. Here's a general estimate:
+- US & EU: Standard shipping typically takes 5-7 business days
+- Other regions: Approximately 10-15 business days
+
+To see the exact shipping cost for your location, please add your desired product to the cart and enter your shipping address at checkout.
+
+If you have any other questions, feel free to ask!
+
+Best regards,
+Chessnut Support Team`;
+    }
+    // 产品配件/配置咨询
+    else if (/(storage box|chess piece storage|配件|存储盒|what.*include|what.*come with|contains|product configuration)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.LENA;
+        draftMessage = `Hi there,
+
+Thank you for contacting us.
+
+Thank you so much for your support of Chessnut, and we're glad you received the premium walnut wood chess piece storage box.
+
+Regarding your question about the wooden chess pieces, please note: the premium walnut wood chess piece storage box is a separate accessory. It only includes the storage box (with charging function and status window) and does not include the wooden chess pieces. The plastic chess pieces that came with the chessboard can be stored and charged normally in this storage box, so please use them with confidence.
+
+If you still have questions about the product configuration, please feel free to contact us. We are happy to provide further assistance.
+
+We hope our reply has been helpful. Thank you again for your understanding and support!`;
+    }
+    // Shopify 订单相关 → Lena Wang
     else if (/(shopify|order #\d+|order no \d+|order number \d+|my order|status update|shipping eta|missing item|order adjustment|track|where.*order|where.*package|order.*confirmed|order.*shipped|还没收到|什么时候发货|发货时间|订单.*状态|订单.*物流|where is my|when will.*ship|has.*shipped|delivery update)/i.test(textToAnalyze) 
              && !/(evo|move|defective|broken|aliexpress|速卖通|go)/i.test(textToAnalyze)) {
         assigneeId = AGENTS.LENA;
@@ -234,7 +335,6 @@ Thank you for your understanding and support.`;
     else if (/(questions before ordering|before.*order|shipping to|deliver to|退货政策|return policy|warranty|deliver to|ship to.*germany|ship to.*eu)/i.test(textToAnalyze)) {
         assigneeId = AGENTS.LENA;
         
-        // 售前回复模板
         if (/(questions before ordering|before.*order|thinking about|considering)/i.test(textToAnalyze)) {
             draftMessage = `Hi there,
 
@@ -253,26 +353,15 @@ Best regards,
 Chessnut Support Team`;
         }
     }
+    // KOL/评测/Youtuber → Jennifer
+    else if (/(youtuber|review|kols|influencer|content creator|评测|博主|unboxing)/i.test(textToAnalyze)) {
+        assigneeId = AGENTS.JENNIFER;
+    }
 
     // === 优先级 4: 未提及具体型号的退换货/技术问题 → Gwen/Jennifer 轮询 ===
     else if (/(return|defective|broken|magnetized|firmware|base|charging|won't connect|recognition|not recognize|pgn|training)/i.test(textToAnalyze)) {
         assigneeId = (jonyJenniferTurn % 2 === 0) ? AGENTS.GWEN : AGENTS.JENNIFER;
         jonyJenniferTurn++;
-    }
-    // 产品配件/配置咨询 → Lena Wang
-    else if (/(storage box|chess piece storage|配件|存储盒|what.*include|what.*come with|contains|product configuration)/i.test(textToAnalyze)) {
-        assigneeId = AGENTS.LENA;
-        draftMessage = `Hi there,
-
-Thank you for contacting us.
-
-Thank you so much for your support of Chessnut, and we're glad you received the premium walnut wood chess piece storage box.
-
-Regarding your question about the wooden chess pieces, please note: the premium walnut wood chess piece storage box is a separate accessory. It only includes the storage box (with charging function and status window) and does not include the wooden chess pieces. The plastic chess pieces that came with the chessboard can be stored and charged normally in this storage box, so please use them with confidence.
-
-If you still have questions about the product configuration, please feel free to contact us. We are happy to provide further assistance.
-
-We hope our reply has been helpful. Thank you again for your understanding and support!`;
     }
     // 兜底：其他所有工单 → Jony/Jennifer 轮询
     else {
