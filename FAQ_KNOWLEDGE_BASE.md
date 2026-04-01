@@ -851,6 +851,150 @@
 
 ---
 
+## 📋 官方FAQ补充（2026-04-01 更新，来源：飞书汇总表）
+
+> 以下内容从公司官方 FAQ 表格和硬件软件问题汇总表提取，是**标准回复依据**。
+
+### 产品对比速查
+
+| 产品 | 类型 | AI内置 | 材质（棋盘/棋子） | 尺寸 | 充电 | 续航 |
+|---|---|---|---|---|---|---|
+| **Chessnut Air** | 电子棋盘 | ❌ 需外接设备 | 木材+塑料/塑料 | 33×33cm | USB-C, 3-4h充满 | ~10h |
+| **Chessnut Air+** | 电子棋盘 | ❌ 需外接设备 | 全木（樱桃木+枫木）/全木（黄杨木+相思木） | 33×33cm | USB-C, 3-4h充满 | ~10h |
+| **Chessnut Pro** | 电子棋盘 | ❌ 需外接设备 | 全木（樱桃木+枫木）/全木 | 55×55cm | USB-C, 3-4h充满 | ~10h |
+| **Chessnut Go** | 便携电子棋盘 | ❌ 需外接设备 | 塑料（磁性底座） | 9×10.5英寸, 4mm薄, 1.3kg | USB-C | - |
+| **Chessnut Evo** | 一体机 | ✅ 内置MAIA | 木框+金属喷涂/钢琴漆塑料棋子 | 52×34cm, 2.84kg | 10W USB-C, PD 18W可尝试 | 5-10h |
+| **Chessnut Move** | 机器人棋盘 | ❌ 需外接设备 | - | - | - | - |
+
+### 常用回复模板
+
+#### 1. 物流追踪（小包物流）
+> Due to our cooperative freight agent shipping a large batch of parcels from China to your country, detailed logistics updates may not be available during transit. The package's logistics status will only be updated once it has been scanned at the local post office upon arrival.
+
+#### 2. 保修政策
+> Whether within the warranty period or not, feel free to reach out to us if you encounter any issues. We will assist you in analyzing and identifying the problem. If it's a hardware defect within the warranty period, we will directly provide a replacement for you. For software-related issues, regardless of the warranty status, we will offer you a solution.
+
+#### 3. 取消订单
+> We have processed the cancellation of your order, and the funds will be refunded to your original payment account within 1-3 business days, depending on your bank.
+
+#### 4. PO Box 地址
+> Due to your provided recipient address being a PO Box, we regret to inform you that we are unable to proceed with the delivery. We kindly request that you provide us with a valid physical shipping address.
+
+#### 5. 汇率问题
+> As our website is built on Shopify, the platform and its payment system enforce currency conversion and settlement according to their exchange rates. Unfortunately, we have no control over this process.
+
+#### 6. EVO Training 收费
+> ChessMind's engine training service offers two payment models: one is a subscription-based plan, allowing unlimited engine training throughout the subscription period. The other option involves payment per usage. Users who haven't subscribed may see an expiration notice, but as long as there are gifted sessions, engine training can proceed as usual.
+
+#### 7. 蓝牙连接问题
+> 1. Enable GPS on your phone, the BLE connection relies on GPS.
+> 2. Grant location permission to the app.
+> 3. You don't need to pair it in your Bluetooth settings. Just go to our apps and click the Bluetooth icon in the upper right corner.
+> 4. Ensure the blue LED on the board is flashing. If not, short press the power button to enable it.
+> Video: https://www.youtube.com/watch?v=OvTcpitBBhs
+
+#### 8. Chess.com Google登录问题
+> Due to Google's restrictions on third-party webpage views, the 'Sign in with Google' option is unavailable. Please log in using your chess.com account:
+> 1. Open chess.com official website in your browser
+> 2. Settings -> Password
+> 3. Change 'Username' and password, then log in with credentials.
+
+#### 9. Chess.com Tournament模式
+> chess.com has restricted the use of tournament mode. A workaround is available using the ChessConnect Chrome extension: https://chrome.google.com/webstore/detail/chessconnect/dmkkcjpbclkkhbdnjgcciohfbnpoaiam
+
+#### 10. Lichess 模式限制
+> Lichess has restricted certain chess modes that third-party applications can access. Classical and Rapid are permitted, but Bullet, Blitz, Puzzle, and Endgame are restricted. Only 10+ minute games are supported.
+> More info: https://lichess.org/api#tag/Board
+
+#### 11. 棋子脚垫鼓起（Air/Evo常见）
+> The bulging at the bottom is due to poor breathability, causing air inside to expand and contract with temperature changes. A temporary solution is to release the air by pressing the bulging part back in with your thumb.
+> Video: https://youtu.be/sQ09Z03_DL
+
+#### 12. 充电灯不变绿
+> Due to differences in firmware versions across production batches, your product may have a version where the board automatically turns on after being fully charged and enters sleep mode when no pieces are detected. If you prefer the other firmware version, please provide your order number and product serial number.
+
+#### 13. 退货地址
+
+**欧洲：**
+> Recipient: EIE__81303
+> Address: Alte Zollstraße 50 (Warehouse 4), Niederkrüchten, 41372, NRW, Germany
+> Phone: 004915253332674
+
+**美国（不可二次售卖）：**
+> Recipient: 1329-JZsolution
+> Address: 1230 E 6th Street, Los Angeles, California 90021
+> Phone: 626-216-4775
+
+**美国（可二次售卖）：**
+> Recipient: GCUSReturn G3943
+> Address: C/O 2221 Remington Ave, Ontario, California, 91762
+
+**欧洲（可二次售卖）：**
+> Recipient: GCCZReturn G3943
+> Address: C/O Heinrich-Barth-Str.18, 53881 Euskirchen, Germany
+
+#### 14. 重置棋盘存储单元（无法导出OTB Game）
+> 1. Ensure the device is powered on.
+> 2. Press and hold the "+" button for 15 seconds.
+> 3. While continuing to press "+", simultaneously press the power button until the device restarts.
+
+#### 15. 棋子脚垫脱落/翘边（Go居多）
+> 拍视频确认，酌情安排补发。
+
+#### 16. Go 磁性检查（60°内正常）
+> 请将所有棋子摆放在棋盘上，轻轻抬起至60°，检查棋子吸附情况，并录制视频。
+> 超过6个棋子掉落 → 补发一整套替换棋子。
+
+#### 17. Go 漏光
+> Due to the ultra-thin design and smaller battery, a weak current through the LED lights may cause a faint glow. This is normal and does not affect usage. We are continuing to research solutions.
+
+#### 18. Go 温度范围
+> Charging: 0~45°C. Discharging: -20~60°C. Storage: -5~35°C (recommended 25±5°C).
+
+#### 19. EVO 屏幕问题
+> ① 疑似漏光 → 酒精擦拭屏幕，亮屏1小时看是否消失
+> ② 绿屏 → 检查是否摔过，尝试RESET
+> ③ 黑点 → 协商部分退款，尝试立起轻敲
+> ④ 双指触控异常 → 酒精擦拭屏幕
+
+#### 20. EVO 无法开机
+> 序列号CE13A/CE14开头 → 直接更换。CE14B/CE15开头 → 问姜姜是否需要退回调查。
+
+#### 21. EVO Chess.com/Lichess 不识别棋子
+> 1. 确认App是最新版本：Side Bar -> Chess board setting -> Check update
+> 2. 使用默认棋盘/棋子皮肤：
+>    - Chess.com: Piece=Neo, Board=Green
+>    - Lichess: Piece=cnurnett, Board=Brown
+>    - Chesskid: Piece=Club, Board=Blue
+> 3. Chess.com设置：Settings -> Profile -> Board and Pieces -> Move Method -> Drag or Click
+> 4. Lichess设置：Preferences -> Game behavior -> How do you move pieces? -> Either
+
+#### 22. EVO ELO数值
+> Stockfish 16/17.1: 600-3190 (CCRL标准)
+> Maia: 1100-1900
+> Fairy Stockfish (低于1100时): 600-1100
+
+#### 23. Move 充电板灯不变化
+> 1. 更换其他充满电的棋子放在异常充电孔上测试
+> 2. 把异常小车放在正常充电孔上测试
+> → 确认是小问题还是充电板问题
+
+#### 24. Move 棋子碰撞
+> Move 使用 AFPR (Advanced Full Piece Recognition) 技术实时追踪每个棋子位置，碰撞后会自动重新规划路线。
+
+#### 25. Move WiFi升级/刷机
+> 1. 安装 Win32DiskImager
+> 2. 解压 img.xz (约30GB)
+> 3. 用软件写入SD卡
+
+#### 26. 税号要求
+> For parcels from China, some countries require tax ID for customs clearance. This information is used only for shipping and will not be disclosed. Failure to provide may result in shipping refusal.
+
+#### 27. 汇率/Shopify
+> Shopify and its payment system enforce currency conversion. We have no control over exchange rates.
+
+---
+
 ## 待老板审核的事项
 
 1. **各回复模板中的占位符** — [link], [CODE], [date] 等需要填入实际值
