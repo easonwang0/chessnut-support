@@ -208,8 +208,9 @@ async function run() {
   for (const ticket of tickets) {
     if (ticket.status === 5) continue;
 
-    // 只处理无分组的工单，跳过其他所有分组（Kyle Wang / Minmin Hong / Stella Liu / Basilia Wang 等由 Chessnut Official 处理）
-    if (ticket.group_id) continue;
+    // 跳过保护分组（Kyle Wang / Minmin Hong / Stella Liu / Basilia Wang），其他分组正常处理
+    const PROTECTED_GROUPS = [150000414285, 150000414284, 150000414287, 150000414286];
+    if (ticket.group_id && PROTECTED_GROUPS.includes(ticket.group_id)) continue;
 
     const body = extractText(ticket);
     const subject = (ticket.subject || '').toLowerCase();
