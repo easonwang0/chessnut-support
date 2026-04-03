@@ -9,8 +9,31 @@ This skill defines the autonomous actions for handling incoming Freshdesk suppor
   - **Gwen Liu (Hardware & Tech Support)**: Assign tickets specifically regarding "Chessnut Move" usage, defective pieces, base replacements, firmware updates, and all website/product reviews.
   - **Jennifer Chen/Jony He (Platform & General)**: Assign platform disputes (PayPal cases, Payoneer cases), general pre-sales inquiries, and specific Chessnut GO support tickets.
 - **Spam & System Notifications**:
-  - **Criteria**: "Notification of payment received", "Amazon hat Ihre", "has authorized a payment to you", "parcel is on its way", "your advertisement has been approved", and generic marketing/spam.
-  - **Execution**: Close the ticket immediately without responding (status: 5). Apply tag `auto-spam-closed`.
+  - **Sender-based filtering (Layer 1a)**: Auto-close tickets from known notification senders before any content analysis:
+    - Shopify: `@mailer.shopify.com`, `@shopify.com` (noreply)
+    - Amazon: `@marketplace.amazon.*`, `@sellernotifications.*`, `@bounce.amazon`, `@amazon.*` (noreply, all country TLDs)
+    - AliExpress: `@aliexpress.com` (noreply/seller), `@service.aliexpress`, `@selleroperation.*`
+    - Facebook/Meta: `@facebookmail.com`, `@business.facebook.com`, `@meta.com` (noreply)
+    - Mailchimp: `@mailchimp.com`, `@mandrillapp.com`
+    - Fuuffy: `@fuuffy.com`
+    - PPL: `@pplcz.com`, `@ppl-pk.com`
+    - Impact: `@impact.com`
+    - PayPal: `@paypal.com` (noreply/service, not dispute-related)
+    - TikTok: `@tiktok.com`, `@business.tiktok`
+    - Generic: any `@noreply.*`, `@no-reply.*`, `@mailer.*`, `@notifications.*`, `@system.*`, `@bounce.*`
+  - **Content-based filtering (Layer 1b)**: Close tickets matching notification content patterns:
+    - Amazon multi-language: German (Amazon hat Ihre/Ihre Auszahlung), Italian (La tua e-mail/Pagamento elaborato), Spanish (Valida tu dirección/Reembolso iniciado/Tu pago), French (Votre paiement), Finnish (Pakollinen tilin)
+    - AliExpress: 违背发货承诺, 卖家未发货订单关闭, 订单已通过风控审核
+    - Fuuffy: 運單派送延誤, 運單差價追收
+    - PayPal: "Notification of payment received", "has authorized a payment", "Here's a case update"
+    - Mailchimp: "Audience Export Complete", "Mailchimp Order"
+    - Facebook/Meta: 广告审核通过, "Your Facebook video cannot be displayed"
+    - Music copyright alerts (UMPG)
+    - Ads/spam: "Our Solopreneur Sale", "跨境销售", "Partner has been deactivated"
+    - Impact: "Public Terms Application", "Product Catalog Submission"
+    - Reviews: "left a X star review for"
+    - TikTok: verification codes
+  - **Execution**: Close the ticket immediately without responding (status: 5). Apply tag `auto-spam-closed` (sender-based gets `sender-based` tag too).
 
 ## 2. Technical Troubleshooting & Auto-Drafting (Optimized)
 - **CRITICAL RULE**: Do NOT use generic troubleshooting templates unless the specific product and issue are confirmed. Always ask for evidence first if it's a hardware/defect claim.
