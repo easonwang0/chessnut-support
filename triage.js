@@ -194,7 +194,7 @@ Chessnut Support Team`
 // 顺序: Spam → Case → 产品问题 → 订单物流 → 兜底
 // ═══════════════════════════════════════════════════════
 async function run() {
-  const eightHoursAgo = new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString();
+  const eightHoursAgo = new Date(Date.now() - 9 * 60 * 60 * 1000).toISOString();
   console.log(`Fetching tickets updated since ${eightHoursAgo}...`);
   const tickets = await request(`/tickets?updated_since=${eightHoursAgo}&include=description`);
 
