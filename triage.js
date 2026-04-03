@@ -277,9 +277,9 @@ async function run() {
       /@no-reply\./i.test(email) ||
       /@donotreply\./i.test(email) ||
       /@do-not-reply\./i.test(email) ||
-      /^donotreply@/i.test(email) ||
+      /^donotreply@/i.test(email) && !/mailsupport\.aliyun/i.test(email) ||
       /^do-not-reply@/i.test(email) ||
-      /^no-reply@/i.test(email) ||
+      /^no-reply@/i.test(email) && !/mailsupport\.aliyun/i.test(email) ||
       /^noreply@/i.test(email) ||
       /@mailer\./i.test(email) ||
       /@notifications?\./i.test(email) ||
