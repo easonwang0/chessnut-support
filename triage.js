@@ -248,11 +248,11 @@ async function run() {
       /@ppl-pk\.com$/i.test(email) ||
       // Amazon（各国 marketplace 通知，analysis.xlsx 中大量出现）
       /@marketplace\.amazon/i.test(email) ||
-      /@amazon\.com$/i.test(email) && /no-reply|noreply/i.test(email) ||
+      /@amazon\.com$/i.test(email) && /no-reply|noreply|donotreply|do-not-reply/i.test(email) ||
       /@sellernotifications/i.test(email) ||
       /@sellernotifications\.amazon/i.test(email) ||
-      /@amazon\.co\.(uk|jp|kr)$/i.test(email) && /no-reply|noreply|notification/i.test(email) ||
-      /@amazon\.(de|fr|it|es|nl|se|pl|tr|eg|ae|sa|in|sg|au|ca|com\.br|com\.mx)$/i.test(email) && /no-reply|noreply|notification/i.test(email) ||
+      /@amazon\.co\.(uk|jp|kr)$/i.test(email) && /no-reply|noreply|donotreply|do-not-reply|notification/i.test(email) ||
+      /@amazon\.(de|fr|it|es|nl|se|pl|tr|eg|ae|sa|in|sg|au|ca|com\.br|com\.mx)$/i.test(email) && /no-reply|noreply|donotreply|do-not-reply|notification/i.test(email) ||
       /@bounce\.amazon/i.test(email) ||
       /@returns\.amazon/i.test(email) ||
       /@payments\.amazon/i.test(email) ||
@@ -275,6 +275,12 @@ async function run() {
       // 其他常见系统通知源
       /@noreply\./i.test(email) ||
       /@no-reply\./i.test(email) ||
+      /@donotreply\./i.test(email) ||
+      /@do-not-reply\./i.test(email) ||
+      /^donotreply@/i.test(email) ||
+      /^do-not-reply@/i.test(email) ||
+      /^no-reply@/i.test(email) ||
+      /^noreply@/i.test(email) ||
       /@mailer\./i.test(email) ||
       /@notifications?\./i.test(email) ||
       /@system\./i.test(email) ||
