@@ -8,9 +8,9 @@ const AUTH = 'Basic ' + Buffer.from(API_KEY + ':X').toString('base64');
 
 const AGENTS = {
   GWEN:     150033754311,
-  LENA:     150022830364,
+  LENA:     150073233500,
   JENNIFER: 150023804601,
-  JONY:     150073233500
+  JONY:     150022830364
 };
 
 const AGENT_NAMES = {
@@ -207,6 +207,10 @@ async function run() {
 
   for (const ticket of tickets) {
     if (ticket.status === 5) continue;
+
+    // 只处理 Group: -- (无分组) 的工单，跳过其他分组
+    const PROTECTED_GROUPS = [150000414285, 150000414284, 150000414287, 150000414286]; // Basilia, Kyle, Minmin, Stella
+    if (ticket.group_id && PROTECTED_GROUPS.includes(ticket.group_id)) continue;
 
     const body = extractText(ticket);
     const subject = (ticket.subject || '').toLowerCase();
