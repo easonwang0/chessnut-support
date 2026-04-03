@@ -20,9 +20,9 @@
 
 | Agent | ID | 负责内容 |
 |-------|-----|---------|
-| Gwen Liu | 150033754311 | Move/Evo 硬件问题、固件、充电、棋子故障 |
+| Gwen Liu | 150033754311 | EVO、Move 硬件和软件 |
 | Lena Wang | 150073233500 | 订单、物流、发货、取消订单、地址修改、发票 |
-| Jennifer Chen | 150023804601 | Air/Pro/Go 产品、软件/App、KOL 合作、**兜底** |
+| Jennifer Chen | 150023804601 | Air/Pro/Go 硬件和软件、**兜底** |
 | Jony He | 150022830364 | PayPal Case、Payoneer 争议、品牌合作、媒体请求 |
 
 ---
@@ -73,9 +73,8 @@
 
 | 产品 | 问题类型 | 指派 |
 |------|---------|------|
-| Move / Evo | 硬件故障、固件、充电、棋子不识别 | **Gwen** |
-| Air / Pro / Go | 硬件故障 | **Jennifer** |
-| 任何产品 | 软件/App 使用问题（Lichess、Chess.com、蓝牙连接等） | **Jennifer** |
+| Move / Evo | 硬件和软件问题 | **Gwen** |
+| Air / Pro / Go | 硬件和软件问题 | **Jennifer** |
 | 不确定型号 | 产品问题 | **Jennifer** |
 
 **操作：** group_id=null, responder_id=对应 Agent

@@ -5,9 +5,10 @@ This skill defines the autonomous actions for handling incoming Freshdesk suppor
 ## 1. Intent Detection & Routing (Optimized)
 - **Action**: Analyze incoming tickets to determine the true user intent before assigning or drafting.
 - **Categorization & Routing Rules**:
+  - **Gwen Liu (EVO & Move)**: Assign tickets for Chessnut EVO and Move — hardware issues, software issues, firmware, defective pieces, charging.
   - **Lena Wang (Logistics & Order Manager)**: Assign tickets related to "Shipping date", "My order", "address change", "discount code", "Order Price Adjustment", and logistics tracking.
-  - **Gwen Liu (Hardware & Tech Support)**: Assign tickets specifically regarding "Chessnut Move" usage, defective pieces, base replacements, firmware updates, and all website/product reviews.
-  - **Jennifer Chen/Jony He (Platform & General)**: Assign platform disputes (PayPal cases, Payoneer cases), general pre-sales inquiries, and specific Chessnut GO support tickets.
+  - **Jennifer Chen (Air/Pro/Go & Fallback)**: Assign tickets for Chessnut Air/Pro/Go — hardware issues, software issues, and all unclassified tickets.
+  - **Jony He (Cases & Disputes)**: Assign platform disputes (PayPal cases, Payoneer cases), brand partnerships, media requests.
 - **Spam & System Notifications**:
   - **Sender-based filtering (Layer 1a)**: Auto-close tickets from known notification senders before any content analysis:
     - Shopify: `@mailer.shopify.com`, `@shopify.com` (noreply)
