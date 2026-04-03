@@ -60,6 +60,33 @@ Agents should use the following tags in Freshdesk to quickly filter and process 
 - `ai-logistics-update`: Logistics ticket. The package has moved.
 - `ai-pacification-draft`: Logistics ticket (>24h with no movement).
 
+## Critical Rules (Learned from 2026-04-03)
+
+### Agent ID Mapping (VERIFIED against API)
+- **Gwen Liu**: 150033754311
+- **Lena Wang**: 150073233500
+- **Jennifer Chen**: 150023804601
+- **Jony He**: 150022830364
+
+### Group Filtering
+- **ONLY process**: Group: Customer Support (150000248275) and Group: -- (null)
+- **NEVER touch**: Kyle Wang, Minmin Hong, Stella Liu, Basilia Wang — belong to Chessnut Official (150018815546)
+- When assigning: set group_id=null AND responder_id
+
+### Reply Handling Rule
+- Customer replying to a Chessnut email ("Re: Message from Chessnut", "Re: A shipment from order...", etc.) → assign to the agent who sent the original email (typically Jennifer Chen)
+- Do NOT reclassify by content if it's a reply to an agent's email
+
+### Sender Filtering
+- ticket.requester_email is often undefined — must fetch via contacts API: /contacts/{requester_id}
+- @mailer.shopify.com → auto-close
+- donotreply@amazon.com → auto-close
+- no-reply@mailsupport.aliyun.com → do NOT close, assign to Jennifer (bounce)
+- noreply@facebookmail.com → auto-close
+
+### Fallback
+- Uncertain tickets → Jennifer Chen
+
 ## Dependencies (To implement)
 - An active `FRESHDESK_API_KEY` and domain configuration.
 - An active `17TRACK_API_KEY`.
