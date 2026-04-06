@@ -226,3 +226,38 @@ EU 仓库有货、次日发货、1-3天出单号、3-5天送达、30天退货政
 
 ### 产品介绍
 Air/Pro/Go = 手动走子 + LED 指示 | Evo = 内置 AI | Move = 自动走子
+
+---
+
+## 七、Shopify + track17 物流追踪集成
+
+### 配置
+- Shopify: 域名 `chessnutech.myshopify.com`，token 存在 `chessnut-services.json`
+- track17: Token 存在 `chessnut-services.json`，使用 `skills/track17/scripts/track17.py` 操作
+- 环境变量：`TRACK17_TOKEN`
+
+### 物流查询流程
+1. 从 Freshdesk 工单获取订单号（客户提供的或从邮件内容提取）
+2. 用 Shopify API 查询订单：`/admin/api/2026-01/orders.json?status=any&name=#[订单号]`
+3. 从 fulfillment 获取 `tracking_number` 和 `tracking_company`
+4. 用 track17 skill 注册追踪：`python3 track17.py add "[tracking_number]" --label "Order #[订单号]"`
+5. 执行 sync：`python3 track17.py sync`
+6. 查看状态：`python3 track17.py status "[tracking_number]"`
+7. 根据最新物流事件起草回复
+
+### track17 常用操作
+- 添加：`python3 track17.py add "123" --label "Order #xxx"`
+- 同步：`python3 track17.py sync`（拉取所有已注册单号的最新状态）
+- 查看：`python3 track17.py status "123"`
+- 配额：`python3 track17.py quota`
+- 停止：`python3 track17.py stop 1`
+
+### 配额管理
+- 总配额：200（Free Trial）
+- 每次分诊自动 sync 更新所有已注册单号
+- 新单号注册时消耗 1 次配额
+
+### waiting-for-tracking 标签
+- 首次遇到物流查询但 track17 还没数据 → 打 `waiting-for-tracking` 标签
+- 每次分诊检查有此标签的工单 → 执行 sync → 有更新则重新起草回复
+- 有物流更新后 → 移除 `waiting-for-tracking`，打 `ai-draft-ready`
