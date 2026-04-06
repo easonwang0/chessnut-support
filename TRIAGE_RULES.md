@@ -54,7 +54,8 @@
 | `@tiktok.com` / `@business.tiktok` | TikTok 通知 |
 | `@aliexpress.com` (noreply/seller) | 速卖通通知 |
 | `@kickstarter.com` (noreply) | Kickstarter 通知 |
-| `@noreply.*` / `@no-reply.*` / `@donotreply.*` | 通用 noreply |
+| `@noreply.*` / `@no-reply.*` / `@donotreply.*` | 通用 noreply（域名匹配） |
+| `noreply@*` / `no-reply@*` / `donotreply@*` | 通用 noreply（本地部分匹配，如 noreply@payoneer.com） |
 | `@mailer.*` / `@notifications.*` / `@bounce.*` | 通用通知 |
 
 **例外（不关闭）：**
