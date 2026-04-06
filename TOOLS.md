@@ -37,4 +37,10 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
-Add whatever helps you do your job. This is your cheat sheet.
+## Services
+
+所有凭据和配置已存储在服务器：
+`~/.openclaw/credentials/chessnut-services.json`
+
+包含：Freshdesk API Key、GitHub Token、Agent ID、分组 ID 等。
+脚本和分诊任务从该文件读取，不要在此文件中存储密钥。
