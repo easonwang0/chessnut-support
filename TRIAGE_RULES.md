@@ -177,7 +177,10 @@
 ## 四、操作步骤
 
 1. **过滤发件人**（第1层） → 匹配就关闭，不匹配继续
-2. **读取工单全文** → subject + description + conversation history
+2. **读取工单全文** → subject + description + ⚠️ **必须拉 conversation/conversation history 全部看完**
+   - 多轮对话：理解客户前几轮说了什么、Agent 已经做了什么、当前进展
+   - 回复要接上已有对话，不重复问过的问题，不推翻已有承诺
+   - 判断是否还需回复（Agent 可能已在处理中，只需补充信息）
 3. **判断意图** → 按 A/B/C/D/E/F 分类（按优先级从高到低匹配）
 4. **执行操作：**
    - 关闭：`status=5`, `tags=["auto-spam-closed"]`
