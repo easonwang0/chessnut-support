@@ -1,7 +1,7 @@
 # Chessnut Freshdesk 工单分诊规则
 
-> 最后更新: 2026-04-05 | 基于 29 条错误指派数据修正
-> 准确率验证: 26/28 = 93%（在错误指派数据集上）
+> 最后更新: 2026-04-07 | 基于 31 条错误指派数据分析修正
+> 错误分析结论：97% 错误来自 Jennifer 过度指派（老系统关键词匹配）
 
 ## 一、处理范围
 
@@ -85,6 +85,8 @@
 - 媒体采访 / 媒体评测请求
 - affiliate / 推广合作
 - ⭐ **评价通知（"left a X star review"）→ Jony**（用于品牌口碑追踪）
+- ⭐ **展会/展会通知（COMPUTEX, InnoVEX, HK Fair 等）→ Jony**
+- 台湾/海外展会相关通知和参展确认
 
 **意图 C：产品硬件/软件故障 → Gwen Liu 或 Jennifer Chen**
 
@@ -131,9 +133,13 @@
 - FBA 通知
 - 广告/推广/SEO 垃圾邮件
 - Kickstarter 消息
+- ⭐ **Google/YouTube 政策变更通知**
+- ⭐ **"left a X star review" 通知**（Amazon 系统自动发的，非客户主动联系）
+- ⭐ **TikTok 广告/电商通知**
+- ⭐ **速卖通卖家通知（AliExpress seller notifications）**
 
 **⚠️ 不要自动关闭的：**
-- 评价通知 → 给 Jony（意图 B）
+- 评价通知 → 给 Jony（意图 B）— **注意区分：Amazon 自动评价通知（关闭）vs 客户主动提及评价（正常分诊）**
 - 真实客户发来的邮件（即使看起来像通知）→ 仔细判断
 - Shopify/Amazon 的业务政策变更通知 → 留给人工判断（可能影响运营）
 
