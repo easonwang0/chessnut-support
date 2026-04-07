@@ -49,6 +49,7 @@
 | `@mailchimp.com` / `@mandrillapp.com` | 邮件营销 |
 | `@fuuffy.com` | Fuuffy 物流 |
 | `@impact.com` / `notifications@app.impact.com` | Impact 联盟 |
+| `@graypoplar.com` | GrayPoplar 代发广告 |
 | `@paypal.com` (noreply/service) | PayPal 通知（非争议） |
 | `@pplcz.com` / `@ppl-pk.com` | PPL 物流 |
 | `@tiktok.com` / `@business.tiktok` | TikTok 通知 |
@@ -60,6 +61,8 @@
 
 **例外（不关闭）：**
 - `no-reply@mailsupport.aliyun.com` → 转 Jennifer（退信通知）
+- ⭐ `no-reply@mailer.shopify.com` + 内容含 "You have a new message from" → Shopify Inbox 转发的真实客户消息，进入第2层正常分诊
+- `mailer@shopify.com` + "Balance paid" → Shopify 余额支付通知，关闭
 - 不确定发件人 → 跳过，进入第2层
 
 **操作：** status=5, group_id=null, tags 加 `auto-spam-closed`
