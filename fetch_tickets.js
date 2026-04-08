@@ -41,7 +41,7 @@ const isSender = (email) =>
   /@aliexpress\.com$/i.test(email)&&/no-reply|noreply|notification/i.test(email)||
   /@service\.aliexpress/i.test(email)||/@selleroperation/i.test(email)||
   /@info\.aliexpress\.com$/i.test(email)||/@slickdeals\.net$/i.test(email)||
-  /@impact\.com$/i.test(email)||/@mediapartners/i.test(email)||
+  /@impact\.com$/i.test(email)||/@mediapartners/i.test(email)||/@app\.impact\.com$/i.test(email)||
   /@paypal\.com$/i.test(email)&&/no-reply|noreply|service/i.test(email)||
   /@tiktok\.com$/i.test(email)||/@business\.tiktok/i.test(email)||
   /@noreply\./i.test(email)||/@no-reply\./i.test(email)||/@donotreply\./i.test(email)||
