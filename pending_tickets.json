@@ -1,0 +1,133 @@
+{
+  "timestamp": "2026-04-08T10:15:56.360Z",
+  "toClose": [
+    {
+      "id": 108645,
+      "reason": "content-spam"
+    },
+    {
+      "id": 108644,
+      "reason": "sender-spam",
+      "email": "donotreply@amazon.com"
+    },
+    {
+      "id": 108642,
+      "reason": "sender-spam",
+      "email": "cs@fuuffy.com"
+    },
+    {
+      "id": 108641,
+      "reason": "sender-spam",
+      "email": "cs@fuuffy.com"
+    },
+    {
+      "id": 108639,
+      "reason": "sender-spam",
+      "email": "noreply@usds.tiktok.com"
+    },
+    {
+      "id": 108637,
+      "reason": "sender-spam",
+      "email": "cs@fuuffy.com"
+    },
+    {
+      "id": 108636,
+      "reason": "sender-spam",
+      "email": "cs@fuuffy.com"
+    },
+    {
+      "id": 108634,
+      "reason": "content-spam"
+    },
+    {
+      "id": 108632,
+      "reason": "content-spam"
+    },
+    {
+      "id": 108630,
+      "reason": "sender-spam",
+      "email": "mailer@shopify.com"
+    },
+    {
+      "id": 108626,
+      "reason": "sender-spam",
+      "email": "no-reply@mailer.shopify.com"
+    },
+    {
+      "id": 108625,
+      "reason": "content-spam"
+    }
+  ],
+  "toAnalyze": [
+    {
+      "id": 108646,
+      "subject": "Sale from Mexico and doubt",
+      "body": "Hi Stella! I have one request and one question for you, please: - My question is: there is a viewer that has contacted me because he wants to buy Chessnut Move but he lives en Mexico. Is there any possible way to help him get it? He says that he can't get it from the website. Can you advise, please? - My request: can you please put me in contact with someone from the technical team? My Move board is having problems. This weekend I tried to use it but many of the pieces weren't moving. I fully loaded their battery, and they appeared in the app with full battery (green circles) but when I placed them on the board, the board didn't detected them. I deleted the chess pieces from the app, and tried to pair them again (in all the channels, 0, 1, 2 and backup), but the board can't find the pieces at all. Now even after loading them, they just don't show up in the app, like they don't exist. And the pairing process fails, not detecting the pieces. Please help me ?? Thank you! -- [image: Logo] <https://techandising.com/> Joaquín Alviz Founder Móvil: (+34) 605 468 470 Mail: joaquin@techandising.com | www.techandising.com <https://www.facebook.com/techandising> <https://twitter.com/techandising> <https://www.instagram.com/techandising/> <https://www.youtube.com/c/techandising> <https://www.twitch.tv/techandising>",
+      "requester_email": "joaquin@techandising.com",
+      "tags": []
+    },
+    {
+      "id": 108643,
+      "subject": "Product Catalog Submission Received",
+      "body": "Impact Radius Account ID: 6356449 Product Catalog Submission Received We have successfully received your Product feed submission. Details below: Campaign: Chessnut Catalog: Imported Shopify Catalog Time processing started: 2026-04-08 09:52:32.0 Total processing time: 6 Seconds Total records received: 137 Total records accepted: 137 Records with invalid data: 0 Click http://em.impact.com/ls/click?upn=u001.iUNywRU2PIdBuqR2OhDBvG5ApdJhFkZJF3CWBkFfA-2Bba40uyqohBuZ-2BFzyMZwCiScM3SzhH3RXFrxtxaSVjLGJqbxH52QJ7yI1g5wrzWwZmLHdhu9j1eMIjmY-2B-2BJBvuWY7aOLaySA2YbdUQgefWL64B-2BmNe49aOym9TmxM5G9GfjwzNHg-2BHY0naK3XivSkblWsOvCvOdHBH9Hac-2FHvuaAjnQn0xAZVf29ZVOOwjlr0Abub3EUP6AiaKT59-2B6gQjPXdMtsNDF5lVHzYYHMK5tefhg8jmX3kIHu26l0IKKfrk-3D7Ie-_5fvC-2FEjSQJq6sp-2BMM-2FPrJYWrHhNvlbG-2FCLhUxG1vPG9aMA4ayxepnum6IBcxUxVXX-2Ba8F8SW-2FNCw7OIymvS8KayGop8TvslTZQNQ2UhQBTUEbHCKmd64ZDfktljhpM29MLONdqvcr41Wg1Be7iRh-2FU9AO873V0v1jt0aTNAtxRxh9do-2BjCfByF05RIZRAxMvohfz472qD400XGjVkHW-2FAbN0aYkqMGZ1ghZvN9A5-2BQwt4kdJnvD4SxkU4bftdaQOyHsrJfmbjLjqlmOnZcY2wDPAVEJyHjU0scL1XBYazXY-3D to see errors. Records with warnings: 137 Click http://em.impact.com/ls/click?upn=u001.qJkM5WWo1VuKeDUDrYfgCQxWOL9tTn1PIFvEwfk3806W9TCJBAMtIc0rNTZr2EvrXiZWchsj3LoypjQO2SNMsx8tlvWD6cjdIsd4NgjbPYiWhCBKJCqJ6xMpouUgr6mpVXrqGWoqTVRP0Y-2BLBXx1vGL2vrOrZDbz4KhP9TLRJqarziXJ-2Bxrzm2w3LooknqSVv4pFhHcypfddPTicBcVuSsm6-2F5y53OSwzXM9olF50l-2B7azzer8rLlTFZ7swM-2BKAdxrSnrRqUg0XEnip-2BD0cFDhJccWUhpHEBxl2M9B-2B2BEo-3DQIO-_5fvC-2FEjSQJq6sp-2BMM-2FPrJYWrHhNvlbG-2FCLhUxG1vPG9aMA4ayxepnum6IBcxUxVXX-2Ba8F8SW-2FNCw7OIymvS8KayGop8TvslTZQNQ2UhQBTUEbHCKmd64ZDfktljhpM29MLONdqvcr41Wg1Be7iRh-2FU9AO873V0v1jt0aTNAtxRzjsqYq82Ux8R43der5caJEg3urPMb3YYIm134p-2FBR0fhPhQR5rATrrXwA3mn4GsCy6QK-2F21nHE-2Bj-2BOIMp647eKkYWZ0HO8214NvnbCT5UDfzTCkMJvieL-2BRHxSSszJexg-3D to see warnings. Records with duplicates: 0 Click $duplicatesUrl to see duplicates",
+      "requester_email": "notifications@app.impact.com",
+      "tags": []
+    },
+    {
+      "id": 108640,
+      "subject": "An update on your PayPal Case PP-R-DOY-611960277",
+      "body": "An update on your PayPal Case PP-R-DOY-611960277 Zhou Pinzhi, here are the details. Hello, Zhou Pinzhi Case status update We're happy to let you know that the credit card issuer has decided the chargeback in your favor. We've reimbursed your PayPal account for the $144.00 USD. Though this dispute has been adjudicated in your favor, we have charged you a Dispute Fee of $8.00 USD since your account was categorized into High Volume Dispute Fee tier when this dispute was filed. For more details about the Dispute Fee, please see our User Agreement. Case details Case ID: PP-R-DOY-611960277 Buyer's name: Danny Pham Buyer's email: dannydannypham@gmail.com Buyer's transaction ID: 4KL596945M467643A Your transaction ID: 0FS115289M194363J Invoice ID: rQb4h40Xvkkah724CeBSPmwj5 Transaction amount: $144.00 USD Transaction date: 1 January 2026 Disputed amount: $144.00 USD This case is now closed and there is no further action required. Thanks for your patience during this process. For more information on selling safely, please click Security near the bottom of any PayPal page. Help & Contact | Security | Apps PayPal is committed to preventing fraudulent emails. Emails from PayPal will always contain your full name. Learn to identify phishing Please don't reply to this email. To get in touch with us, click Help & Contact. Not sure why you received this email? Learn more Copyright © 1999-2026 PayPal. All rights reserved. Consumer Advisory - PayPal Hong Kong Limited is a licensed issuer of a stored value facility regulated by the Hong Kong Monetary Authority under Licence Number: SVF0008. Users in Hong Kong are advised to read the terms and conditions carefully. PayPal RT000420:en_GB(en-HK):1.2.0:1ae354762f4a9",
+      "requester_email": "service@paypal.com.hk",
+      "tags": []
+    },
+    {
+      "id": 108635,
+      "subject": "Order",
+      "body": "Request for chess order. Model: Chessnut Move Quantity: 500 Countries for delivery: Russia. If not possible - Kazakhstan. The buyer is a company, a legal entity. How much would such an order cost? What is the estimated time for delivery of goods and what is the delivery method? I wrote to you before, received not quite clear answer. Hope for specifics from your side. Thank you in advance, very much waiting for you.",
+      "requester_email": "ilyakirzhner@yandex.ru",
+      "tags": []
+    },
+    {
+      "id": 108633,
+      "subject": "Status",
+      "body": "Checking the status of my order please Edward Charles M&R Equipment llc 58 Bob Craig Road Rutherford, TN 38369 (C) 573-225-3838",
+      "requester_email": "mrequipmentinc@gmail.com",
+      "tags": []
+    },
+    {
+      "id": 108629,
+      "subject": "Fw: CANCEL MY ORDER PLEASE",
+      "body": "Hello, Can you confirm the cancellation of my order ? Thank you, Julien Chavatte Sent with [Proton Mail](https://proton.me/mail/home) secure email. ------- Forwarded Message ------- From: Julien C <julien.chavatte@proton.me> Date: On Monday, April 6th, 2026 at 09:54 Subject: CANCEL MY ORDER PLEASE To: contact@chessnutech.com <contact@chessnutech.com> > Hello, > > Finally, I want to cancel my #41424 order as soon as possible and get a refund. > > This is my last decision. > > Please ignore all my previous emails. > > Best regards, > > Julien Chavatte > > Sent with [Proton Mail](https://proton.me/mail/home) secure email.",
+      "requester_email": "julien.chavatte@proton.me",
+      "tags": []
+    },
+    {
+      "id": 108628,
+      "subject": "Technical issue with Chessnut Evo - Unresponsive Touchscreen (Order #41217)",
+      "body": "Hello, I received my Chessnut Evo three days ago. Initially, everything worked perfectly, but when I turned it on today, the screen lit up but stopped responding to any touch input. I have already tried the following steps to resolve the issue: Restarted the device several times. Pressed the reset button. Unfortunately, nothing has helped so far. At one point, the screen worked again for about 5 seconds, but then it immediately became unresponsive again. What should I do to fix this? Order Number: #41217 Serial Number: CE16100247 Kind regards, Thomas Lässig",
+      "requester_email": "thomaslaessig@gmx.de",
+      "tags": []
+    },
+    {
+      "id": 108627,
+      "subject": "Product Catalog Submission Received",
+      "body": "Impact Radius Account ID: 6356449 Product Catalog Submission Received We have successfully received your Product feed submission. Details below: Campaign: Chessnut Catalog: Imported Shopify Catalog Time processing started: 2026-04-08 08:16:23.0 Total processing time: 4 Seconds Total records received: 137 Total records accepted: 137 Records with invalid data: 0 Click http://em.impact.com/ls/click?upn=u001.iUNywRU2PIdBuqR2OhDBvG5ApdJhFkZJF3CWBkFfA-2Bba40uyqohBuZ-2BFzyMZwCiScM3SzhH3RXFrxtxaSVjLGJqbxH52QJ7yI1g5wrzWwZmLHdhu9j1eMIjmY-2B-2BJBvuWY7aOLaySA2YbdUQgefWL64B-2BmNe49aOym9TmxM5G9GfjwzNHg-2BHY0naK3XivSkblWsOvCvOdHBH9Hac-2FHvuaAjnQn0xAZVf29ZVOOwjlr0Abub3EUP6AiaKT59-2B6gQjPXdMtsNDF5lVHzYYHMK5tefhg8jmX3kIHu26l0IKKfrk-3DeSmS_5fvC-2FEjSQJq6sp-2BMM-2FPrJYWrHhNvlbG-2FCLhUxG1vPG9aMA4ayxepnum6IBcxUxVXX-2Ba8F8SW-2FNCw7OIymvS8KayGop8TvslTZQNQ2UhQBTUEbHCKmd64ZDfktljhpM29c7qNFA-2FSZuUrWlAqZK0fOxmHefFw7mfMCTz6sDo7dTrYleYzl1D5Gq7prwQA68VBT-2BZnrqUP00dO2VcdxCVw3Q3eWpnf1-2BPRhZYS52U0iX4OfuJkNwCQBZB5icyGLDN3Q8XYn5vLV8O4uH2zBnF2kUsXdIy8XfI4TS-2BiSgKMMhE-3D to see errors. Records with warnings: 137 Click http://em.impact.com/ls/click?upn=u001.qJkM5WWo1VuKeDUDrYfgCQxWOL9tTn1PIFvEwfk3806W9TCJBAMtIc0rNTZr2EvrXiZWchsj3LoypjQO2SNMsx8tlvWD6cjdIsd4NgjbPYiWhCBKJCqJ6xMpouUgr6mpVXrqGWoqTVRP0Y-2BLBXx1vGL2vrOrZDbz4KhP9TLRJqarziXJ-2Bxrzm2w3LooknqSVv4pFhHcypfddPTicBcVuSsm6-2F5y53OSwzXM9olF50l-2B7azzer8rLlTFZ7swM-2BKAdxrSnrRqUg0XEnip-2BD0cFDhJccWUhpHEBxl2M9B-2B2BEo-3DmnaX_5fvC-2FEjSQJq6sp-2BMM-2FPrJYWrHhNvlbG-2FCLhUxG1vPG9aMA4ayxepnum6IBcxUxVXX-2Ba8F8SW-2FNCw7OIymvS8KayGop8TvslTZQNQ2UhQBTUEbHCKmd64ZDfktljhpM29c7qNFA-2FSZuUrWlAqZK0fOxmHefFw7mfMCTz6sDo7dTr6aogw9-2BT1UvDKvuCCfBi6O7pwNM43GpDmBldl9Rr5dIH4MvbGmFJa4v-2BxuRTZmY0J33fF8EztW3sJyqj3DvVHLQ2kriF4MnfpHSfcqifTyOQysm7MNHpy6pdo781ePLo-3D to see warnings. Records with duplicates: 0 Click $duplicatesUrl to see duplicates",
+      "requester_email": "notifications@app.impact.com",
+      "tags": []
+    },
+    {
+      "id": 108624,
+      "subject": "Re: Order #41321 confirmed",
+      "body": "Hi, Order #41321 I ordered these products on 1st April and have only got a confirmation of the order. On the website it did state that it should arrive around the 11th or 12th of April. So far I've not seen any dispatch notifications or any detail that the order is even being processed. Can you please advise when I can expect something to happen? Kind Regard Jason Burdett ________________________________ From: Chessnut <store+63095439612@t.shopifyemail.com> Sent: Wednesday, April 1, 2026 1:00 PM To: jasonburdett@gmail.com <jasonburdett@gmail.com> Subject: Order #41321 confirmed [Chessnut] Order #41321 Thank you for your purchase! Hi Jason, we're getting your order ready to be shipped. We will notify you when it has been sent. View your order<https://www.chessnutech.com/_t/c/v3/AACypRnBdnq8y_iJOSWQArP4lrAdSg2Cx1FL-yf9XFgi6qDUBwao3HWS0SSAvhHZk9EJlN9_oX39TWwMC0eEwb3817iQh53YtvXka55F9PmuAxbCaf-I_Q5uxhjv6WYCtGSOMiWv5-LoEO38ZBZdX2ANkXVq4-2OpJEjuBIV6mCOr5FrQeNzLKFV3JaukyiA4dSWVKDi-mmsDkmQzbIW6F-yFasS8fl0UprayqOYQQCPwk7HqW8HEcKKAF93qCQgGhdXN-seK3WszlhaV46PIeDz5ighIr_l9KL52UDjM7oW3SSog1NZtqh-7jUbEkdOOqgAavHFoVZR11w_G-Zo7t9ZphFxLOoe5gvx_lYz3VXZOtVDiCQqHi375BAqjRg_sHo2WLUGVO_sSzn1iscPKFzBqq_mS8FsT_y9PUzuphCXP4y2U0j5L-Sm-vnt7-3tQ55Ka9AqnyajEchgUhxRAI1yYlHJU4nyDRhL1edDgDZ4Kt7Mt1W7dt4fI8OPpmU8ySDxYMsNJAclbzSKjTrQgJwmd6GNrK3NmsoXZDmXXjDJ8dtqL0BKCF5zjLSOFzw37rDydi2P4hPlTCjBAvpdOyc3HE-t3gyU7vogxxsjAhKAJmUoIoJFKvUlqCusgWpeDXM3_lJ5iX8WRQbnkDiYL_V0AhaR1jpKaepX0uim6COiIY1FZApc4vagEcC8px0KPS75T0gg0adFp6sjQNb2aL1VqKPlqX8dL1vqi7bzg_rqCFAnxiXjm5wHSR6UiMpnBMbRo8CVQ39ntf5skzx3lKt8b7tlDR7zsgRTElhXsFmAstb65TPtpaDoVNAUSziBI4_4Wv_tMlF1ttka3Epyj6Y7yYCQevALr6ZtxmkbI01Cwb7RN_hKv392EgHCPMhQMJQyBLO9y-M574mVZCxmfCK7Gv90BBEILdEMtTaa5LNEoYgiubWKqsbst3YF0pyidKPzn0e7YzFB1kyvKqyIDDVVHDzcDTpUok7T2zVhy6wcHDhcVdgNWBE_f_tB2CY_npaNXuq-I--sGdFLxJ_UMiuVrkTakt3VWncKOLx8GyviKP8IANFpsd1Yp8LRL49SD_ydzGmSlV093SXSmNif5ZOOF586-00X5zVxcxgt036Bb9v0gcXdS-kn73lFNqIoOygeKE5HNpkke7g8txEN7DCyiAHViGmQ3B2x0paErzFfrfoQmVS8ND-YCpyS",
+      "requester_email": "jasonburdett@gmail.com",
+      "tags": []
+    },
+    {
+      "id": 108623,
+      "subject": "Zhou Pinzhi - Case ID #PP-R-MBL-623668653 has been closed",
+      "body": "Zhou Pinzhi - Case ID #PP-R-MBL-623668653 has been closed Zhou Pinzhi, here are the details. Dear Zhou Pinzhi, Update on case resolution You have issued a refund of $857.29 USD to Fagner Moreno Barbalho and this case has been closed. Thanks for working with your buyer to resolve this case. To know more, go to the case details section in the Resolution Center. Transaction Details Case number PP-R-MBL-623668653 Buyer's name Fagner Moreno Barbalho Transaction date 7 April 2026 Transaction amount $857.29 USD Your transaction ID 8A00083731974954C Invoice ID r3vCxYS6IoYWs6s8oOprMmlCF Help & Contact | Security | Apps PayPal is committed to preventing fraudulent emails. Emails from PayPal will always contain your full name. Learn to identify phishing Please don't reply to this email. To get in touch with us, click Help & Contact. Not sure why you received this email? Learn more Copyright © 1999-2026 PayPal. All rights reserved. Consumer Advisory - PayPal Hong Kong Limited is a licensed issuer of a stored value facility regulated by the Hong Kong Monetary Authority under Licence Number: SVF0008. Users in Hong Kong are advised to read the terms and conditions carefully. PayPal RT000395:en_GB(en-HK):1.1.0:b2a80e4dfa32e",
+      "requester_email": "service@paypal.com.hk",
+      "tags": []
+    }
+  ]
+}
