@@ -119,23 +119,27 @@ const log = { closed:[], gwen:[], lena:[], jennifer:[], jony:[], errors:[] };
       const sw=/pgn|otb|lichess|chess\.com|training|engine|login|bluetooth|app.*crash|app.*issue|app.*error|not\s+sync|chessmind|board\s*editor|stockfish|maia|chesskid|chessable|ble|pairing|can.t.*find.*board|search.*device/i.test(text);
       const mv=/\bmove\b|\bevo\b/i.test(text);
       const air=/\bair\b|air\s*\+|\bpro\b|\bgo\b/i.test(text);
-      // 产品名 + 问题/使用关键词（兜底，捕捉非缺陷的产品咨询）
+      // 宽松的产品检测：产品名 + 任何疑问/问题表达
       const hasProduct = mv || air;
-      const usageQ=/how\s+(do|can|to)|not\s+sure|compatible|connect\s+(it|the|my)|work\s+with|use\s+(it|the|this)|setting\s+up|setup|troubleshoot|instructions|manual|help\s+(me|with)|difficult|issue\s+with|problem\s+with|question\s+about|wondering/i.test(text);
-      if(hw || sw || (hasProduct && usageQ)){
+      const isQuestion=/how\s+(do|can|to)|does\s+(it|this|the)|can\s+(i|you)|is\s+(it|this)|will\s+(it|this)|compatible|work\s+with|use\s+(it|this|the)|setting\s+up|setup|troubleshoot|instructions|manual|help\s+(me|with)|issue\s+with|problem\s+with|question\s+about|wondering|\?/i.test(text);
+      if(hw || sw || (hasProduct && isQuestion)){
         if(mv&&!air){assignee=AGENTS.GWEN;stage='3-product-gwen';}
         else if(air&&!mv){assignee=AGENTS.JENNIFER;stage='3-product-jennifer';}
         else if(mv){assignee=AGENTS.GWEN;stage='3-product-gwen';}
         else{assignee=AGENTS.JENNIFER;stage='3-product-jennifer';}
       }
     }
-    // L4: Order → Lena
+    // L4: Order → Lena（仅限明确的订单/物流相关）
     if(!assignee){
       const hasOrd=/order\s*#?\s*\d+|order\s*no|purchase\s*(number|#)\s*\d+|订单号/i.test(text);
-      if(hasOrd||/when.*ship|tracking|track.*order|track.*package|where.*my.*order|cancel.*order|change.*address|has.*shipped|refund|reimburse/i.test(text)||
-        hasOrd&&/invoice|发票/i.test(text)||/missing\s*item|still\s*waiting|haven.*received/i.test(text)||
+      if(hasOrd||
+        /where.*my.*order|where.*my.*package|track.*my.*order|track.*my.*package|when.*my.*order.*ship|when.*will.*ship|has.*my.*order.*shipped/i.test(text)||
+        /cancel.*my.*order|cancel.*this.*order|change.*my.*address/i.test(text)||
+        /refund|reimburse/i.test(text)||
+        hasOrd&&/invoice|发票/i.test(text)||
+        /missing\s*item|missing\s*piece|still\s*waiting|haven.*received|not\s*yet\s*received|yet\s*to\s*receive/i.test(text)||
         /questions\s*before\s*ordering|shipping\s*cost|return\s*policy/i.test(text)||
-        /widerruf|rückgabe|storno/i.test(text)||/warranty.*delivery|delivery.*warranty/i.test(text)){
+        /widerruf|rückgabe|storno/i.test(text)){
         assignee=AGENTS.LENA;stage='4-order-lena';
       }
     }
