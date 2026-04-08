@@ -115,8 +115,8 @@ const log = { closed:[], gwen:[], lena:[], jennifer:[], jony:[], errors:[] };
     }
     // L3: Product — Air/Go/Air+/Pro → Jennifer, Move/Evo → Gwen
     if(!assignee){
-      const hw=/defective|broken|faulty|magnetized|not\s*recogni[zs]|malfunction|unresponsive|piece.*defect|piece.*broken|board.*not\s*work|board.*issue|power button|can.t connect|not\s+connect|won.t\s+connect|not\s+working|won.t\s+turn\s+on|not\s+turning\s+on|firmware|overheating|battery.*drain|battery.*issue|charging.*issue|led.*not|led.*issue/i.test(text);
-      const sw=/pgn|otb|lichess|chess\.com|training|engine|login|bluetooth|app.*crash|app.*issue|app.*error|not\s+sync|chessmind|board\s*editor|stockfish|maia|chesskid|chessable/i.test(text);
+      const hw=/defective|broken|faulty|magnetized|not\s*recogni[zs]|malfunction|unresponsive|piece.*defect|piece.*broken|board.*not\s*work|board.*issue|power button|can.t connect|not\s+connect|won.t\s+connect|not\s+working|won.t\s+turn\s+on|not\s+turning\s+on|firmware|overheating|battery.*drain|battery.*issue|charging.*issue|led.*not|led.*issue|led.*not.*flash|blue.*led.*solid|blue.*led.*not|board.*not.*detect|board.*not.*recogni[zs]/i.test(text);
+      const sw=/pgn|otb|lichess|chess\.com|training|engine|login|bluetooth|app.*crash|app.*issue|app.*error|not\s+sync|chessmind|board\s*editor|stockfish|maia|chesskid|chessable|ble|pairing|can.t.*find.*board|search.*device/i.test(text);
       const mv=/\bmove\b|\bevo\b/i.test(text);
       const air=/\bair\b|air\s*\+|\bpro\b|\bgo\b/i.test(text);
       // 产品名 + 问题/使用关键词（兜底，捕捉非缺陷的产品咨询）
