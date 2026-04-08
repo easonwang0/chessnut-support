@@ -1009,5 +1009,191 @@
 
 ---
 
+## 附录：飞书表格官方标准回复模板
+
+> 以下模板来自公司飞书知识库，为官方标准回复。优先使用这些模板。
+
+### A1. 物流 — 小包物流查询不到更新
+> Due to our cooperative freight agent shipping a large batch of parcels from China to your country, detailed logistics updates may not be available during transit. The package's logistics status will only be updated once it has been scanned at the local post office upon arrival. We appreciate your understanding.
+
+### A2. 物流 — 预售发货时间
+**EVO（欧盟/美国）：** 预计12月底安排寄出，1月收到。跟踪单号1-3个工作日内更新到订单页面。
+**EVO（小包国家）：** 订购后第二天安排发出，跟踪单号1-3个工作日内更新，预计运输10-15个工作日。
+**Air+预售：** 限量预售中，预计一月底左右按订单顺序发出。
+**Pro+炸毛（Premium wooden piece set）：** 限量预售中，预计1月底左右按订单顺序发出。
+
+### A3. 订单 — 查询物流状态
+> We have looked into your order, Order number: [----], Tracking number: [----]. You can use this email to check the package's logistics status: [Tracking Link]. The estimated delivery time is [date]. Please be patient while awaiting the delivery of your package.
+
+### A4. 取消/退款 — 取消订单（确认后）
+> We have processed the cancellation of your order, and the funds will be refunded to your original payment account within 1-3 business days, depending on your bank.
+
+### A5. 取消/退款 — 退款
+> We have already initiated the refund process for your order, and the funds will be returned to the original payment method within 1-3 business days. However, the exact timeline may vary depending on your bank.
+
+### A6. 取消/退款 — 未发货取消订单
+> We understand that you would like to cancel your order. Please kindly provide the reason for the cancellation. However, we would like to inform you that if the order is canceled, reordering may not qualify for the current discount.
+
+### A7. 售后 — 请求提供问题视频
+> We understand that you have encountered issues with our product. We kindly ask you to provide us with a video showcasing the specific problems you are facing. Upon receiving the video, we will be able to gain a clearer understanding of the issues and proceed with the necessary analysis and resolution.
+
+### A8. 售后 — Chess.com Google登录问题
+> Due to Google's restrictions on third-party webpage views, the 'Sign in with Google' option is unavailable. Please log in using your chess.com account.
+> 1. Open chess.com in your browser
+> 2. Navigate to Settings -> Password
+> 3. Change your Username and password, then log in with credentials.
+
+### A9. 订单 — 要求提供税号
+> We have arranged to ship your package. To ensure a successful shipment, please provide us with your Tax Identification Number, as it is required for customs clearance.
+
+### A10. 物流 — PO BOX地址无法配送
+> We have processed your order and handed the package over to our partnered shipping company. However, due to your provided recipient address being a PO Box, we regret to inform you that we are unable to proceed with the delivery. We kindly request that you provide us with a valid physical shipping address.
+
+### A11. 售后 — 重置棋盘存储单元
+> 1. Ensure the device is powered on.
+> 2. Press and hold the "+" button for 15 seconds.
+> 3. While continuing to press the "+" button, simultaneously press the power button until the device restarts.
+
+### A12. 产品咨询 — EVO vs Air/Air+/Pro差异
+> EVO is an all-in-one device equipped with MAIA, allowing direct gameplay against AI. Chessnut Air, Air+, and Pro do not have built-in AI. If you wish to play against the AI chess engine, you would need a PC, Mac, smartphone, or tablet.
+
+### A13. 产品咨询 — Air vs Air+差异
+> Similarities: Same usage method, identical chessboard size.
+> Differences: Air has wood+plastic panel board with plastic pieces. Air+ features all-wood board and pieces.
+
+### A14. 产品咨询 — Air+ vs Pro差异
+> Similarities: Same usage method, both all-wood.
+> Differences: Air+ is 33cm x 33cm x 1.8cm. Pro is 55cm x 55cm x 2cm (tournament size).
+
+### A15. 售后 — 蓝牙连接问题
+> 1. Enable GPS on your phone (BLE connection relies on GPS)
+> 2. Allow location permission to the app
+> 3. Don't pair in Bluetooth settings — just go to our app and click the Bluetooth icon in the upper right corner
+> 4. Ensure the blue LED on the board is flashing. If not, short press the power button to enable it.
+> Video: https://www.youtube.com/watch?v=OvTcpitBBhs
+
+### A16. 售后 — 蓝牙灯不闪烁
+> Don't plug in the power cord while performing these steps:
+> 1. Press and hold the power button for 3 seconds to turn on. Power light changes from red to green.
+> 2. Bluetooth light should be flashing (ready to connect).
+> 3. If not flashing, try briefly pressing the power button once.
+
+### A17. 售后 — 蓝牙灯长亮但App无法连接/棋步不识别
+> We believe the issue might be caused by your phone's Bluetooth being connected to the chessboard, preventing the app from connecting properly.
+> 1. Go to phone Bluetooth settings, find previously connected devices
+> 2. Locate our product model and select "Forget" or "Remove"
+> 3. Restart the Chessnut app and try connecting again.
+
+### A18. 售后 — 固件更新
+> Generally, firmware updates are not required too frequently. New versions only include minor modifications. Please send us your order number and product serial number. We will assess whether your product is suitable for a firmware update.
+
+### A19. 售后 — 棋子脚垫鼓起
+> The bulging is due to poor breathability, causing air inside to expand and contract with temperature changes. A temporary solution: use your thumb to press the bulging part back in.
+> Video: https://youtu.be/sQ09Z03_DL
+
+### A20. 售后 — 蓝牙名字差异
+> This is normal. The difference in names is due to variations in firmware versions. If you need the latest firmware, please provide your order number and product serial number.
+
+### A21. 售后 — 充电灯不变绿
+> Due to differences in firmware versions across production batches, the board may automatically turn on after being fully charged and enter sleep mode when no pieces are detected (no power drain). If you prefer the other firmware version, please provide order number and serial number.
+
+### A22. 售后 — Lichess个别模式无法使用
+> Lichess has restricted certain modes for third-party apps. Classical and Rapid are permitted, but Bullet, Blitz, Puzzle, and Endgame are restricted.
+> More info: https://lichess.org/api#tag/Board
+
+### A23. 售后 — Chess.com Tournament无法使用
+> chess.com has restricted tournament mode. A workaround is the ChessConnect Chrome extension:
+> https://chrome.google.com/webstore/detail/chessconnect/dmkkcjpbclkkhbdnjgcciohfbnpoaiam
+
+### A24. 产品咨询 — 咨询Air
+> Chessnut Air is an electronic chessboard that supports playing chess worldwide through our APP (Chessnut). Travel size 35*35cm with hinting LED lights. Great for all ages!
+> Video: https://www.youtube.com/watch?v=a_W3UJhf4s4
+> Purchase: https://www.chessnutech.com/pages/chessnut-air
+
+### A25. 产品咨询 — 咨询Pro
+> Chessnut Pro is tournament size (55cm x 55cm), all-wood (cherry + maple), with hidden LED indicator lights. The cherry+maple material oxidizes beautifully over time.
+> Purchase: https://www.chessnutech.com/pages/chessnut-pro
+
+### A26. 产品咨询 — 咨询EVO
+> EVO features: 1) Customizable AI opponent, 2) Intelligent game analysis, 3) Optimal move suggestions via colored indicator lights.
+> Purchase: https://www.chessnutech.com/pages/chessnut-evo
+
+### A27. 产品咨询 — 咨询Go
+> Chessnut Go is a portable electronic chessboard (1.3KG, 9 x 10.5 x 0.15 inches, 4mm thin). Magnetic board supports 70° tilt angle with upgraded Full Piece Recognition.
+> Purchase: https://www.chessnutech.com/pages/chessnut-go
+
+### A28. 售后（EVO）— 棋子识别问题
+> Please use the "Board Editor" in EVO for recognition and send us a video.
+> Path: Bot Match -> Board Editor
+
+### A29. 售后（EVO）— Chess.com不正常使用
+> 1. Check app version: Side Bar -> Chess board setting -> Check update
+> 2. chess.com settings: Settings -> Profile -> Board and Pieces -> Move Method -> Drag or Click
+> 3. Use default skins: Piece=Neo, Board=Green
+
+### A30. 售后（EVO）— Lichess不正常使用
+> 1. Check app version: Side Bar -> Chess board setting -> Check update
+> 2. Lichess settings: Preferences -> Game behavior -> How do you move pieces? -> Either
+> 3. Use default skins: Piece=cnurnett, Board=Brown
+
+### A31. 售后（EVO）— 在线平台不识别棋子
+> 1. Confirm EVO Chessnut App is latest version
+> 2. Use default piece/board options:
+>    - Chess.com: Piece=Neo, Board=Green
+>    - Lichess: Piece=cnurnett, Board=Brown
+>    - Chesskid: Piece=Club, Board=Blue
+
+### A32. 售后（EVO）— 充电慢
+> This is normal — our device has more power-consuming features than typical Android devices. Turn off completely for standby and use a PD charger for charging.
+
+### A33. 售后（EVO）— 充电按键发烫
+> Due to metal materials for the button panel, it dissipates internal heat through the panel. This is generally normal and safe. If you believe the heat is excessive, please measure the temperature and send photos.
+
+### A34. 售后（EVO）— Training训练收费
+> ChessMind engine training has two payment models: subscription-based (unlimited training) and pay-per-use. Users without subscription may see expiration notice, but gifted sessions still work.
+
+### A35. 售后（EVO）— APK是什么
+> APK is an Android app installer file. Since Evo doesn't support GMS (no Play Store), download APK files from official websites or third-party markets like Aptoide.
+
+### A36. 售后（EVO）— 不能翻转屏幕
+> Side Bar -> Android system settings -> Display -> Advanced -> turn off Auto-rotate screen.
+> Also check multi-user mode: Side Bar -> Android system settings -> System -> Multiple users (turn off).
+> Video: https://youtu.be/Kzc3VngwRto
+
+### A37. 售后 — 删除Chessnut账号（iOS）
+> 1. Log in, tap the icon in the top left corner to enter Side Bar
+> 2. Tap your username -> User Info
+> 3. Click "Delete Account"
+
+### A38. 订单 — 跟客户确认订单
+> We are processing your order for shipment. We kindly ask you to confirm the following product information and quantity:
+> Order number: [----]
+> Products in the order: [product list]
+> Once we receive your confirmation, we will proceed with the next steps for shipping.
+
+### A39. 产品咨询 — 棋子兼容性
+> Chessnut Go and Move pieces cannot be used with other board models. However, Air, Air+ and Pro pieces can be recognized and used interchangeably.
+
+### A40. 产品咨询 — 延保
+> When you apply for a two-year extended warranty, choose your product. The warranty activates automatically upon package delivery. If ordered after receiving the product, it activates the day after your order.
+
+### A41. 售后 — 棋子加重材料
+> Due to EMR recognition system limitations, we cannot use metal-weighted chess pieces. Use cement, sand, or barium sulfate for weighting.
+
+### A42. 售后 — Go是否防水
+> Chessnut Go is not waterproof due to the open charging port and speakers. It can tolerate minor splashes during regular use.
+
+### A43. 售后（EVO）— ELO数值
+> Stockfish 16: 600-3190, Maia: 1100-1900
+
+### A44. 售后（EVO）— 电池容量
+> Built-in 10,000mAh lithium battery. After 3,000 full charge/discharge cycles, retains ~80% capacity (~8,000mAh).
+
+### A45. 售后 — 充电问题（EVO）
+> Use a 5W power USB adapter to connect to the chessboard for charging. Alternatively, try an 18W power adapter with PD protocol.
+
+---
+
 *生成时间: 2026-03-26*
 *数据来源: Freshdesk 5,220 封工单 (2026/02/25 - 2026/03/26)*
+*更新: 2026-04-08 — 整合飞书表格官方回复模板*

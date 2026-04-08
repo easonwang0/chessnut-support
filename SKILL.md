@@ -6,14 +6,15 @@ This skill defines the autonomous actions for handling incoming Freshdesk suppor
 - **Action**: Analyze incoming tickets to determine the true user intent before assigning or drafting.
 - **Categorization & Routing Rules**:
   - **Gwen Liu (EVO & Move)**: Assign tickets for Chessnut EVO and Move — hardware issues, software issues, firmware, defective pieces, charging.
-  - **Lena Wang (Logistics & Order Manager)**: Assign tickets related to "Shipping date", "My order", "address change", "discount code", "Order Price Adjustment", and logistics tracking.
+  - **Lena Wang (Logistics & Order Manager)**: Assign tickets related to order numbers, "shipping date", "My order", "address change", "discount code", "Order Price Adjustment", warranty/delivery inquiries, logistics tracking.
   - **Jennifer Chen (Air/Pro/Go & Fallback)**: Assign tickets for Chessnut Air/Pro/Go — hardware issues, software issues, and all unclassified tickets.
-  - **Jony He (Cases & Disputes)**: Assign platform disputes (PayPal cases, Payoneer cases), brand partnerships, media requests.
+  - **Jony He (Cases & Disputes)**: Assign platform disputes (PayPal cases PP-R-xxx, "buyer has filed a case", Payoneer cases), brand partnerships, media requests.
 - **Spam & System Notifications**:
   - **Sender-based filtering (Layer 1a)**: Auto-close tickets from known notification senders before any content analysis:
-    - Shopify: `@mailer.shopify.com`, `@shopify.com` (noreply)
+    - Shopify: `@mailer.shopify.com`, `@shopify.com`
     - Amazon: `@marketplace.amazon.*`, `@sellernotifications.*`, `@bounce.amazon`, `@amazon.*` (noreply, all country TLDs)
-    - AliExpress: `@aliexpress.com` (noreply/seller), `@service.aliexpress`, `@selleroperation.*`
+    - AliExpress: `@aliexpress.com` (noreply/seller), `@service.aliexpress`, `@selleroperation.*`, `@info.aliexpress.com`
+    - Slickdeals: `@slickdeals.net`
     - Facebook/Meta: `@facebookmail.com`, `@business.facebook.com`, `@meta.com` (noreply)
     - Mailchimp: `@mailchimp.com`, `@mandrillapp.com`
     - Fuuffy: `@fuuffy.com`
@@ -25,6 +26,7 @@ This skill defines the autonomous actions for handling incoming Freshdesk suppor
   - **Content-based filtering (Layer 1b)**: Close tickets matching notification content patterns:
     - Amazon multi-language: German (Amazon hat Ihre/Ihre Auszahlung), Italian (La tua e-mail/Pagamento elaborato), Spanish (Valida tu dirección/Reembolso iniciado/Tu pago), French (Votre paiement), Finnish (Pakollinen tilin)
     - AliExpress: 违背发货承诺, 卖家未发货订单关闭, 订单已通过风控审核
+    - Slickdeals 促销通讯, 订单已通过风控审核
     - Fuuffy: 運單派送延誤, 運單差價追收
     - PayPal: "Notification of payment received", "has authorized a payment", "Here's a case update"
     - Mailchimp: "Audience Export Complete", "Mailchimp Order"
