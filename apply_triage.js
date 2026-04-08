@@ -63,7 +63,7 @@ const agentMap = {
     }
   }
 
-  // Assign tickets
+  // Assign tickets + write draft replies
   if(assignments && assignments.length > 0){
     console.log('\nAssigning '+assignments.length+' tickets...');
     for(const a of assignments){
@@ -82,6 +82,16 @@ const agentMap = {
         await request('/tickets/'+a.id,'PUT',{tags:[...tags, 'ai-triaged', stage]});
         log.assigned.push('#'+a.id+' → '+a.assignee+' ('+stage+')');
         console.log('  #'+a.id+' → '+a.assignee+' ('+a.reason+')');
+
+        // Write draft reply as private note
+        if(a.draft_reply){
+          await sleep(400);
+          await request('/tickets/'+a.id+'/notes','POST',{
+            body: '<b>[AI Draft Reply]</b><br><br>'+a.draft_reply.replace(/\n/g,'<br>'),
+            private: true
+          });
+          console.log('    → Draft reply written to private note');
+        }
       }catch(e){
         log.errors.push('Assign #'+a.id+': '+e.message);
         console.error('  Error assigning #'+a.id+': '+e.message);
