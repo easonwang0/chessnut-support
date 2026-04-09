@@ -1,17 +1,14 @@
 const fs = require('fs');
 const pending = require('./pending_tickets.json');
 
-const toClose = [];
+// Auto-inherit ALL toClose from fetch_tickets.js spam detection
+const toClose = pending.toClose.map(t => ({ id: t.id, reason: t.reason }));
 const assignments = [];
 
 function add(id, assignee, stage, reason, draftReply) {
   const entry = { id, assignee, stage, reason };
   if (draftReply) entry.draft_reply = draftReply;
   assignments.push(entry);
-}
-
-function close(id, reason) {
-  toClose.push({ id, reason });
 }
 
 // ===== ORDER STATUS / LOGISTICS → LENA =====
@@ -657,9 +654,6 @@ https://chessnutech.com`);
 // #108734 - PayPal case PP-R-CFN-623797962 ($799.00)
 add(108734, 'JONY', '2-case-jony', 'PayPal dispute — PP-R-CFN-623797962, $799.00', paypalDraft);
 
-// #108710 - PayPal case auto-closed PP-R-TOV-621156660
-close(108710, 'paypal-case-auto-closed');
-
 // #108718 - Payoneer dispute (arne.theisen@gmx.net, $679.15)
 add(108718, 'JONY', '2-case-jony', 'Payoneer dispute — $679.15, arne.theisen@gmx.net', `Hi,
 
@@ -671,11 +665,6 @@ Best,
 Jony He
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
-
-// George Hild duplicates - already handled in #108740
-close(108743, 'duplicate-of-108740');   // Same issue, EVO app connection
-close(108742, 'duplicate-of-108740');   // Same issue, iPad message
-close(108741, 'duplicate-of-108740');   // Same issue, "am I going to get anyone"
 
 // #108673 - Grand Philippe: Will Move pieces/batteries be sold separately?
 add(108673, 'JENNIFER', '3-product-jennifer', 'Product inquiry — will Move pieces/batteries be sold separately?', `Hi Philippe,
@@ -691,28 +680,30 @@ Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// ===== SPAM / SYSTEM CLOSES =====
-close(108790, 'ad-billing-not-chessnut');        // Bing ad billing
-close(108773, 'content-spam');                    // Pinterest
-close(108763, 'sender-spam');                     // DBEE notification
-close(108760, 'content-spam');                    // Journalist newsletter
-close(108759, 'content-spam');                    // Google Ads notification
-close(108753, 'content-spam');                    // Amazon deals
-close(108745, 'content-spam');                    // Amazon FBA shipment
-close(108739, 'content-spam');                    // Fuuffy delivery
-close(108738, 'content-spam');                    // Kickstarter
-close(108707, 'content-spam');                    // Amazon seller verification
-close(108683, 'content-spam');                    // Impact.com newsletter
-close(108690, 'content-spam');                    // Fuuffy notification
+// Manual closes for tickets NOT caught by fetch_tickets.js spam detection
+// These are tickets from toAnalyze that need to be closed (duplicates, auto-closed cases, etc.)
+// Auto-inherit from pending.toClose handles the rest
+const manualCloses = [
+  { id: 108710, reason: 'paypal-case-auto-closed' },  // PayPal auto-closed, not spam
+  { id: 108743, reason: 'duplicate-of-108740' },       // George Hild duplicate
+  { id: 108742, reason: 'duplicate-of-108740' },       // George Hild duplicate
+  { id: 108741, reason: 'duplicate-of-108740' },       // George Hild duplicate
+];
+manualCloses.forEach(c => {
+  if (!toClose.find(x => x.id === c.id)) toClose.push(c);
+});
+
+const assignIds = new Set(assignments.map(a => a.id));
+const filteredClose = toClose.filter(c => !assignIds.has(c.id));
 
 const output = {
   timestamp: new Date().toISOString(),
-  toClose,
+  toClose: filteredClose,
   assignments
 };
 
 fs.writeFileSync(__dirname + '/triage_decisions.json', JSON.stringify(output, null, 2));
 console.log('Generated triage_decisions.json');
-console.log('  To close:', toClose.length);
+console.log('  To close:', filteredClose.length, '(from pending:', pending.toClose.length, '+ manual:', manualCloses.length, ')');
 console.log('  Assignments with draft:', assignments.filter(a => a.draft_reply).length);
 console.log('  Assignments without draft:', assignments.filter(a => !a.draft_reply).length);
