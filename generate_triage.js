@@ -696,6 +696,18 @@ manualCloses.forEach(c => {
 const assignIds = new Set(assignments.map(a => a.id));
 const filteredClose = toClose.filter(c => !assignIds.has(c.id));
 
+// Assign remaining unprocessed tickets that match specific patterns
+for (const t of pending.toAnalyze) {
+  if (assignments.find(a => a.id === t.id)) continue;
+  if (toClose.find(c => c.id === t.id)) continue;
+  const subj = (t.subject || '').toLowerCase();
+  // "Balance paid for order" → Jennifer (order confirmation reply)
+  if (subj.includes('balance paid for order')) {
+    add(t.id, 'JENNIFER', '3-product-jennifer', 'Balance paid for order — needs follow-up',
+      `Hi,\n\nThank you for your payment. Your order has been fully paid and we are processing it for shipment.\n\nWe will send you the tracking information once your order has been dispatched.\n\nIf you have any questions, please don't hesitate to reach out.\n\nBest,\nJennifer Chen\nCustomer Service Representative, Chessnut\nhttps://chessnutech.com`);
+  }
+}
+
 const output = {
   timestamp: new Date().toISOString(),
   toClose: filteredClose,

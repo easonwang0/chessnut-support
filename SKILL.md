@@ -8,6 +8,7 @@ This skill defines the autonomous actions for handling incoming Freshdesk suppor
   - **Gwen Liu (EVO & Move)**: Assign tickets for Chessnut EVO and Move — hardware issues, software issues, firmware, defective pieces, charging.
   - **Lena Wang (Logistics & Order Manager)**: Assign tickets related to order numbers, "shipping date", "My order", "address change", "discount code", "Order Price Adjustment", warranty/delivery inquiries, logistics tracking.
   - **Jennifer Chen (Air/Pro/Go & Fallback)**: Assign tickets for Chessnut Air/Pro/Go — hardware issues, software issues, and all unclassified tickets.
+  - **Routing keywords**: Subject containing "Balance paid for order" → assign to Jennifer.
   - **Jony He (Cases & Disputes)**: Assign platform disputes (PayPal cases PP-R-xxx, "buyer has filed a case", Payoneer cases), brand partnerships, media requests.
 - **Spam & System Notifications**:
   - **Sender-based filtering (Layer 1a)**: Auto-close tickets from known notification senders before any content analysis:
