@@ -22,26 +22,61 @@ AUTO_CLOSE_SENDERS = [
     "@mailchimp.com", "@mandrillapp.com", "@fuuffy.com",
     "@impact.com", "notifications@app.impact.com",
     "@graypoplar.com",  # 代发垃圾广告
+    "@paypal.com",  # PayPal 通知（争议除外，后面单独判断）
+    "@pplcz.com", "@ppl-pk.com",
+    "@tiktok.com", "@business.tiktok",
+    "@aliexpress.com",
+    "@kickstarter.com",
+    "@google.com",  # Google/YouTube 政策通知
 ]
 
-# Content patterns that indicate auto-close (even if sender doesn't match)
+# Content patterns that indicate auto-close (checked against BOTH subject + description)
 AUTO_CLOSE_CONTENT = [
-    "left a star review", "review notification",
+    "left a star review", "left a review", "review notification",
     "notification of payment received",
     "你的广告已通过审核", "ad has been approved",
-    "balance paid for order",  # Shopify 余额支付通知
+    "balance paid for order", "balance paid",  # Shopify 余额支付通知
     "product catalog submission received",  # Impact.com 产品目录
     "dropshipping", "3pl fulfillment",  # 代发广告
     "zero inventory risk", "complimentary branding",  # 代发广告
     "subsidized saas",  # 代发广告
-    "您收到了一笔付款",  # Shopify 收款通知
+    "您收到了一笔付款",  # 收款通知
     "amazon has shipped your sold item",  # Amazon 发货通知
     "has paid the outstanding balance",  # Shopify 余额支付
+    "fba inbound shipment received",  # FBA 入库通知
+    "automated unfulfillable fba inventory",  # FBA 库存通知
+    "refund initiated for order",  # Amazon 退款通知
+    "你的包裹已準備出庫",  # 谷仓出库
+    "你的包裹已經送達",  # 谷仓送达
+    "訂單已確認", "訂單收據",  # Fuuffy 订单确认
+    "订单确认",  # 订单确认
+    "查件服务进度通知",  # 谷仓查件
+    "billing agreement", "billing agreement change",  # PayPal 账单变更
+    "1st payment received for",  # Shopify 收款
+    "global warehousing",  # 物流广告
+    "essential skills for starting",  # Shopify 营销邮件
+    "your products are now available in chatgpt",  # OpenAI 产品通知
+    "quick note for your page",  # SEO 垃圾
+    "sponsored content",  # 广告垃圾
+    "verified client list",  # 展会数据库垃圾
+    "upcoming events, revenue",  # 营销邮件
+    "discover your next favorite",  # Kickstarter 营销
+    "save up to", "per gallon on gas",  # 杂志广告
+    "tarifas por puesta de inventario",  # Amazon 西班牙语库存通知
+    "加入 dartsnut group",  # Facebook 群组请求
+    "brand旗舰店中缺少",  # Amazon 营销
+    "貨飛 - 訂單申報提醒",  # Fuuffy 申报提醒
 ]
 
 # Shopify Inbox messages that contain REAL customer messages - do NOT auto-close
 SHOPIFY_INBOX_PATTERNS = [
     "you have a new message from",  # Shopify Inbox 转发的真实客户消息
+]
+
+# PayPal dispute patterns — these should NOT be auto-closed even from @paypal.com
+PAYPAL_DISPUTE_PATTERNS = [
+    "pp-r-", "case #", "dispute", "chargeback",
+    "争议", "纠纷",  # Chinese dispute terms
 ]
 
 def load_creds():
@@ -208,19 +243,22 @@ def run_triage():
         return
     
     closed = []
-    assigned = []
+    assigned_tickets = []  # list of dicts: {tid, agent_name, subject, desc_excerpt, draft}
     
     for t in unprocessed:
         tid = t["id"]
-        subject = t.get("subject", "")[:50]
+        subject = t.get("subject", "")
         
-        # Get requester info
+        # Get requester info + full ticket
         full = freshdesk_api(domain, api_key, f"/tickets/{tid}?include=requester")
         requester = full.get("requester", {})
         email = requester.get("email", "").lower()
+        desc_raw = full.get("description_text", full.get("description", ""))
+        desc_clean = clean(desc_raw)
+        desc_excerpt = desc_clean[:120] if desc_clean else subject
         
         # Layer 1: Auto-close
-        desc_lower = full.get("description_text", full.get("description", "")).lower()
+        desc_lower = desc_raw.lower()
         auto_close = False
         
         # Special case: Shopify Inbox forwarding real customer messages → do NOT auto-close
@@ -232,11 +270,21 @@ def run_triage():
                     break
         
         if not is_shopify_inbox:
-            # Sender-based auto-close
-            for pattern in AUTO_CLOSE_SENDERS:
-                if pattern in email:
-                    auto_close = True
-                    break
+            # Check for PayPal disputes first — don't auto-close these
+            is_paypal_dispute = False
+            if "@paypal.com" in email:
+                combined_check = (subject + " " + desc_lower).lower()
+                for pat in PAYPAL_DISPUTE_PATTERNS:
+                    if pat in combined_check:
+                        is_paypal_dispute = True
+                        break
+            
+            if not is_paypal_dispute:
+                # Sender-based auto-close
+                for pattern in AUTO_CLOSE_SENDERS:
+                    if pattern in email:
+                        auto_close = True
+                        break
             
             # Noreply local-part matching (e.g., noreply@payoneer.com, donotreply@xxx)
             if not auto_close:
@@ -245,9 +293,10 @@ def run_triage():
                     auto_close = True
         
         if not auto_close:
-            # Check content-based auto-close
+            # Check content-based auto-close (BOTH subject and description)
+            combined = (subject + " " + desc_lower).lower()
             for pat in AUTO_CLOSE_CONTENT:
-                if pat in desc_lower:
+                if pat in combined:
                     auto_close = True
                     break
         
@@ -257,57 +306,59 @@ def run_triage():
             continue
         
         # Layer 2: Assign based on content
-        desc_lower = full.get("description_text", full.get("description", "")).lower()
-        
-        # Simple intent classification
         agent = agents["lena"]  # default
         agent_name = "Lena"
         tag = "4-order-lena"
-        note = ""
         
         # Order/shipping/delivery related
         if any(w in desc_lower for w in ["order", "shipping", "delivery", "track", "refund", "cancel", "address", "invoice"]):
             agent = agents["lena"]
             agent_name = "Lena"
             tag = "4-order-lena"
-            note = f"<p>Hi,</p><p>Thank you for contacting Chessnut Support. I've looked into your inquiry and will have our team review this right away.</p><p>We'll get back to you within 24 hours with an update.</p><p>Best regards,<br>Chessnut Support</p>"
         # Hardware/product issues
         elif any(w in desc_lower for w in ["evo", "move", "doesn't work", "broken", "defect", "issue", "problem", "error"]):
             agent = agents["gwen"]
             agent_name = "Gwen"
             tag = "3-product-gwen"
-            note = f"<p>Hi,</p><p>Thank you for reaching out about this issue. I'm sorry to hear you're experiencing difficulties.</p><p>I've escalated this to our product team and we'll investigate right away.</p><p>Best regards,<br>Chessnut Support</p>"
         # KOL/collaboration
         elif any(w in desc_lower for w in ["collaborat", "partner", "influencer", "review", "youtube", "sponsor"]):
             agent = agents["jony"]
             agent_name = "Jony"
             tag = "5-kol-jony"
-            note = f"<p>Hi,</p><p>Thank you for your interest in collaborating with Chessnut! I've forwarded your message to our partnerships team.</p><p>Best regards,<br>Chessnut Support</p>"
-        else:
-            # Default: Lena for order inquiries
-            note = f"<p>Hi,</p><p>Thank you for contacting Chessnut Support. Our team will review your inquiry and get back to you shortly.</p><p>Best regards,<br>Chessnut Support</p>"
         
-        assign_ticket(domain, api_key, tid, agent, [tag, "ai-draft-ready"])
-        if note:
-            add_note(domain, api_key, tid, note)
-        summary, reply = quick_summary(desc_lower, subject)
-        assigned.append(f"• #{tid} | {summary} → {agent_name} | {reply}")
+        assign_ticket(domain, api_key, tid, agent, [tag, "needs-draft"])
+        
+        assigned_tickets.append({
+            "tid": tid,
+            "agent_name": agent_name,
+            "subject": subject,
+            "desc_excerpt": desc_excerpt,
+            "tag": tag,
+        })
 
-    # Build report (简洁中文版)
+    # ── Build report (detailed format) ──
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
     lines = [f"📋 Freshdesk 分诊报告 — {now}\n"]
 
+    # Closed tickets summary
     if closed:
-        lines.append(f"🔴 自动关闭 ({len(closed)} 张):")
+        lines.append(f"🔴 自动关闭 {len(closed)} 张")
         for c in closed:
-            lines.append(f"  {c}")
+            lines.append(c)
+        lines.append("")
 
-    if assigned:
-        lines.append(f"\n🟢 指派 ({len(assigned)} 张):")
-        for a in assigned:
-            lines.append(f"  {a}")
+    # Assigned tickets — detailed per-ticket format
+    for item in assigned_tickets:
+        lines.append(f"━━━ #{item['tid']} → {item['agent_name']} 📝 待起草 ━━━")
+        lines.append(f"标题: {item['subject']}")
+        lines.append(f"摘要: {item['desc_excerpt']}")
+        lines.append("")
 
-    lines.append(f"\n共计处理 {len(closed) + len(assigned)} 张工单")
+    total = len(closed) + len(assigned_tickets)
+    if total == 0:
+        lines.append("本轮无新工单 ✅")
+    else:
+        lines.append(f"共处理 {total} 张工单 ✅")
 
     report = "\n".join(lines)
     print(report)
