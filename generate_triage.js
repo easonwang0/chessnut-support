@@ -12,26 +12,13 @@ function add(id, assignee, stage, reason, draftReply) {
 }
 
 // ===== ORDER STATUS / LOGISTICS → LENA =====
-const orderStatusDraft = `Hi,
 
-Thank you for reaching out to us.
+// #108926 - Order 40143, month ago, no update
+add(108926, 'LENA', '3-order-lena', 'Order status inquiry #40143 — delayed 1 month', `Hi Jeff,
 
-We sincerely apologize for the delay. Your order is currently being processed and we are working to get it shipped as soon as possible.
+Thank you for reaching out, and we sincerely apologize for the delay in shipping your order.
 
-If you could kindly confirm your order number, we will check the latest status and provide you with an update right away.
-
-Thank you for your patience and understanding.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`;
-
-const orderUrgentDraft = `Hi,
-
-We sincerely apologize for the delay in shipping your order. We understand how frustrating this must be.
-
-Your order is currently being processed. Due to high demand for the Chessnut Move, there has been a delay in our restocking schedule. We are working to fulfill your order as quickly as possible.
+Your order #40143 is currently being processed. Due to high demand, there has been a delay in our fulfillment schedule. We are working to get your order shipped as soon as possible.
 
 If you would prefer not to wait, we completely understand and can arrange a full refund for you. Please let us know how you would like to proceed.
 
@@ -40,191 +27,30 @@ Thank you for your patience and understanding.
 Best,
 Lena
 Customer Service Representative, Chessnut
-https://chessnutech.com`;
+https://chessnutech.com`);
 
-// #108777 - Order #39108 status
-add(108777, 'LENA', '3-order-lena', 'Order status inquiry #39108', orderStatusDraft);
+// #108924 - Order #39635, no shipping details yet
+add(108924, 'LENA', '3-order-lena', 'Order status inquiry #39635 — no shipping info', `Hi Itumeleng,
 
-// #108758 - Order status #39320 Move
-add(108758, 'LENA', '3-order-lena', 'Order status inquiry #39320 (Move)', orderStatusDraft);
+Thank you for reaching out, and we sincerely apologize for the delay.
 
-// #108751 - Order #41037 confirmation
-add(108751, 'LENA', '3-order-lena', 'Order confirmation inquiry #41037', orderStatusDraft);
+We are looking into the status of your order #39635 and will provide you with an update as soon as possible. Your order is currently being processed and we are working to get it shipped out promptly.
 
-// #108766 - My ORDER (waiting >1 week, wants cancel)
-add(108766, 'LENA', '3-order-lena', 'Order not received, wants cancel if not shipping', orderUrgentDraft);
-
-// #108764 - where's my order (no response)
-add(108764, 'LENA', '3-order-lena', 'Order not received, frustrated, wants cancel', orderUrgentDraft);
-
-// #108762 - Order #40511, 2nd email, upset about Shopify involvement
-add(108762, 'LENA', '3-order-lena', 'Order #40511 overdue, frustrated customer (2nd email)', `Hi Jon,
-
-We sincerely apologize for the delay and for not responding to your first email promptly. We understand your frustration.
-
-Regarding your order #40511: Chessnut uses Shopify as our e-commerce platform to process orders — your purchase is directly with Chessnut, and we are responsible for fulfilling it. We apologize for any confusion.
-
-Your order is currently being processed. Due to high demand, there has been a delay in shipping. We are working to get your order out as quickly as possible.
-
-If you would prefer a refund instead, we completely understand and can arrange that for you immediately.
-
-Please let us know how you would like to proceed, and we will take care of it right away.
+Thank you for your patience.
 
 Best,
 Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108733 - Order update 39544
-add(108733, 'LENA', '3-order-lena', 'Order status inquiry #39544', orderStatusDraft);
-
-// #108726 - Haven't received order, wants refund
-add(108726, 'LENA', '3-order-lena', 'Order not received, demands refund', orderUrgentDraft);
-
-// #108724 - Haven't received my order, wants refund
-add(108724, 'LENA', '3-order-lena', 'Order not received, demands refund (duplicate)', orderUrgentDraft);
-
-// #108722 - Address change #40781
-add(108722, 'LENA', '3-order-lena', 'Address change request #40781 or cancel', `Hi Elizaveta,
+// #108908 - Update on order #40490
+add(108908, 'LENA', '3-order-lena', 'Order status inquiry #40490', `Hi,
 
 Thank you for reaching out.
 
-We have received your request to change the delivery address for order #40781. We will update the address to:
+We sincerely apologize for the delay. Your order #40490 is currently being processed and we are working to get it shipped as soon as possible.
 
-1707 Village Blvd, Apt 308
-West Palm Beach, FL 33409
-
-We will confirm once the address has been updated. If the order has already shipped, we will work with our logistics partner to redirect it.
-
-If you prefer to cancel instead, please let us know and we will process a full refund.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108719 - Shipment inquiry (Move)
-add(108719, 'LENA', '3-order-lena', 'Move order shipping timeline inquiry', orderUrgentDraft);
-
-// #108688 - Order #40149 status
-add(108688, 'LENA', '3-order-lena', 'Order status inquiry #40149', orderStatusDraft);
-
-// #108685 - Order 39008 (Feb order, nearly 2 months)
-add(108685, 'LENA', '3-order-lena', 'Order #39008 delayed since February', orderUrgentDraft);
-
-// #108674 - Order status update request (no order number)
-add(108674, 'LENA', '3-order-lena', 'Order status update request (no order number)', orderStatusDraft);
-
-// #108672 - Order #40511 status (same order as 108762)
-add(108672, 'LENA', '3-order-lena', 'Order #40511 status inquiry (duplicate)', `Hi Jon,
-
-Thank you for reaching out. We apologize for the delay.
-
-We are looking into the status of order #40511 and will provide you with an update as soon as possible.
-
-Regarding Shopify — Chessnut uses Shopify as our e-commerce platform, but your purchase is directly with us. We apologize for any confusion this may have caused.
-
-We appreciate your patience.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108671 - Return for refund (carrying case)
-add(108671, 'LENA', '3-order-lena', 'Return/refund request for Move carrying case', `Hi,
-
-Thank you for reaching out.
-
-We're sorry to hear you'd like to return your Chessnut Move carrying case. We can certainly help with that.
-
-To initiate the return process, please provide us with your order number. Once we verify the details, we will send you a prepaid return label and process your refund upon receipt of the item.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108709 - Cancel order 40202 (carrying case)
-add(108709, 'LENA', '3-order-lena', 'Cancel order #40202 (Move carrying case)', `Hi,
-
-Thank you for letting us know.
-
-We have received your request to cancel order #40202 for the Chessnut Move carrying case. We will process the cancellation and issue a full refund. You should see the refund reflected in your account within 5-10 business days.
-
-We apologize for any inconvenience.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// ===== ADDRESS CORRECTIONS → LENA =====
-
-// #108754 - EVO order address error (Bowmanville → Oshawa)
-add(108754, 'LENA', '3-order-lena', 'Address correction for EVO order (Bowmanville → Oshawa)', `Hi Jim,
-
-Thank you for reaching out promptly.
-
-We have received your address correction request. We will update the shipping address to:
-
-James White
-830 Beatrice St East
-Oshawa, Ontario
-Canada L1K 2H7
-
-We will confirm once the address has been updated in our system. Since you caught this early, we should be able to make the change before shipment.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108736 - Address correction
-add(108736, 'LENA', '3-order-lena', 'Address correction request', `Hi,
-
-Thank you for reaching out.
-
-We have received your request to correct the shipping address. We will update it to:
-
-804 Walnut St, Oolitic, Indiana
-
-Could you please confirm your order number so we can make sure the change is applied to the correct order?
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108679 - Address too long (>35 chars)
-add(108679, 'LENA', '3-order-lena', 'Address exceeds 35-char limit, needs shortening', `Hi,
-
-Thank you for your reply.
-
-We need to shorten the recipient address to meet our logistics partner's requirements. Could you please provide a shorter version of the address? For example:
-
-4297 Express Lane, Sarasota, FL 34249
-
-Could be shortened to something like:
-4297 Express Ln, FL 34249
-
-Please let us know your preferred shortened address and we will proceed with the shipment immediately.
-
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// ===== EXTRA SHIPPING FEE REPLIES → LENA =====
-
-// #108748 - Robin asking about delivery timeline after agreeing to pay extra
-add(108748, 'LENA', '3-order-lena', 'Follow-up on extra shipping fee — delivery timeline', `Hi Robin,
-
-Thank you for confirming.
-
-Now that we have received your confirmation to cover the additional shipping fee, we will proceed with shipping your order immediately. You can expect your order to be dispatched within 1-2 business days, and we will send you the tracking information once it ships.
-
-Delivery typically takes 7-14 business days depending on your location.
+We will send you the tracking information once your order has been dispatched.
 
 Thank you for your patience and understanding.
 
@@ -233,250 +59,449 @@ Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108715 - Nina confirms extra shipping
-add(108715, 'LENA', '3-order-lena', 'Customer confirmed extra shipping fee', `Hi Nina,
+// #108907 - Re: Order #40490 confirmed (same customer as 108908)
+add(108907, 'LENA', '3-order-lena', 'Order status inquiry #40490 (reply to confirmation)', `Hi David,
+
+Thank you for following up. We sincerely apologize for the delay.
+
+Your order #40490 is currently being processed and we are working to get it shipped out as quickly as possible. We will send you the tracking information once it is dispatched.
+
+Thank you for your patience.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108911 - Reply to delay notification (Middle East airspace), just says "Thank you"
+add(108911, 'JENNIFER', '5-fallback-jennifer', 'Customer acknowledged delay notification — no action needed', `Hi,
+
+Thank you for your understanding. We will keep you updated on the status of your order and notify you as soon as it ships.
+
+If you have any questions in the meantime, please don't hesitate to reach out.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108901 - Reply about Middle East ceasefire, wants shipping info
+add(108901, 'LENA', '3-order-lena', 'Customer asking for shipping update — Middle East order', `Hi,
+
+Thank you for the update and for your patience.
+
+We are monitoring the situation closely and will arrange shipment for your order as soon as logistics operations are fully restored in the region. We will send you tracking information as soon as your order ships.
+
+If you have any questions or need further assistance, please let us know.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108897 - Order #41873, wants to speed up delivery
+add(108897, 'LENA', '3-order-lena', 'Order #41873 — customer wants expedited shipping', `Hi Eilidh,
+
+Thank you for your order and for reaching out!
+
+Your order #41873 is being processed and will be shipped as soon as possible. Unfortunately, we do not currently offer an expedited shipping option, but we are working to dispatch all orders promptly.
+
+We will send you the tracking information once your order has been shipped.
+
+Thank you for your patience!
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108870 - Order #41378, when will it dispatch
+add(108870, 'LENA', '3-order-lena', 'Order status inquiry #41378 — dispatch timeline', `Hi Chris,
+
+Thank you for reaching out, and we apologize for the delay.
+
+Your order #41378 is currently being processed. We are working to fulfill orders as quickly as possible and will send you the tracking information once your order has been dispatched.
+
+Thank you for your patience and understanding.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108869 - Order #39689 — 39 days, wants update or refund
+add(108869, 'LENA', '3-order-lena', 'Order #39689 — 39 days delayed, wants update or refund', `Hi Harry,
+
+We sincerely apologize for the delay in shipping your order #39689. We understand how frustrating this must be, especially after 39 days.
+
+Your order is currently being processed. Due to high demand, there has been a delay in our fulfillment schedule. We are working to get it shipped as soon as possible.
+
+If you would prefer a full refund instead of continuing to wait, we completely understand and can arrange that for you immediately.
+
+Please let us know how you would like to proceed.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108864 - Order #40752, delivery status
+add(108864, 'LENA', '3-order-lena', 'Order status inquiry #40752 — delivery timeline', `Hi Alexander,
+
+Thank you for reaching out, and we sincerely apologize for the delay.
+
+We are checking on the status of order #40752 and will provide you with an update as soon as possible. Your order is currently being processed and we are working to fulfill it promptly.
+
+Thank you for your patience.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== ADDRESS CORRECTION → LENA =====
+
+// #108933 - Address correction for order #41808
+add(108933, 'LENA', '3-order-lena', 'Address correction request for order #41808', `Hi Yevheniia,
+
+Thank you for reaching out promptly.
+
+We have received your request to correct the delivery address for order #41808. Could you please provide the new correct shipping address so we can update it in our system?
+
+Once we have the updated address, we will confirm the change and ensure your order is delivered to the correct location.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108923 - Reply about PO Box / DPO AA address (embassy)
+add(108923, 'LENA', '3-order-lena', 'Embassy address — DPO AA format clarification', `Hi Alejandro,
+
+Thank you for the detailed explanation, and we truly appreciate your patience.
+
+We understand the DPO AA address format used by U.S. Embassy personnel. Let us review this with our logistics partner to determine if we can ship to this type of address. DPO addresses are handled through USPS, which may require special arrangements on our end.
+
+We will get back to you as soon as possible with a definitive answer. In the meantime, if you have an alternative physical address available, that would help us expedite the shipment.
+
+Thank you for your understanding, and we hope to get your Chessnut board to you soon!
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108851 - Provide new physical address (was PO Box)
+add(108851, 'LENA', '3-order-lena', 'Customer provided physical address (was PO Box)', `Hi Glenn,
+
+Thank you for providing the updated address. We have received it and will update your order with:
+
+Glenn Ingham
+20 Seekamp Street
+DENMAN PROSPECT ACT 2611
+AUSTRALIA
+
+We will confirm once the address has been updated in our system and proceed with shipping.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== EXTRA SHIPPING FEE REPLIES → LENA =====
+
+// #108915 - "Sure but do I have to wait longer?" (extra shipping $144.85)
+add(108915, 'LENA', '3-order-lena', 'Customer confirmed extra shipping fee — asking about timeline', `Hi Martin,
+
+Thank you for confirming your willingness to cover the additional shipping fee.
+
+We will proceed with shipping your order immediately. You can expect your order to be dispatched within 1-2 business days, and we will send you the tracking information once it ships.
+
+You should not have to wait much longer — we will prioritize your order right away.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108892 - Confirms extra shipping + asks about refund offset ($97.75 vs $32.31 refund)
+add(108892, 'LENA', '3-order-lena', 'Customer confirmed extra shipping + asking about refund offset', `Hi Kushal,
 
 Thank you for confirming. We really appreciate your understanding.
 
-We will proceed with shipping your order right away. You will receive a tracking number via email once the shipment is on its way.
+Regarding the previously agreed refund of US$32.31 — let us verify the status of that refund with our team. If it has not yet been processed, we will adjust your additional shipping charge to the net amount of US$65.44 and proceed with shipping immediately.
+
+We will confirm the final amount and ship your order as soon as this is sorted out.
 
 Best,
 Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108686 - "Yes, please proceed" (extra shipping)
-add(108686, 'LENA', '3-order-lena', 'Customer confirmed extra shipping fee', `Hi,
+// #108850 - Confirms extra shipping ($110.39) + address change
+add(108850, 'LENA', '3-order-lena', 'Customer confirmed extra shipping + address change', `Hi Bridget,
 
-Thank you for confirming. We will proceed with your order right away.
+Thank you for confirming your willingness to cover the additional shipping fee. We really appreciate your understanding.
 
-You will receive a tracking number via email once your order has been shipped.
+We have also noted your updated delivery address:
 
-Best,
-Lena
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
+Bridget Kyoheirwe
+Apartment 2803
+Charrington Tower
+11 Biscayne Avenue
+London, United Kingdom, E14 9BF
 
-// ===== EORI/VAT → LENA =====
-
-// #108697 - Joël providing ID number for customs
-add(108697, 'LENA', '3-order-lena', 'Customer provided ID number for customs (Switzerland)', `Hi Joël,
-
-Thank you for providing your ID number. We have noted the following for customs purposes:
-
-ID Number: C8485912
-
-We confirm that this information will be used solely for shipping and customs clearance and will only be shared with our relevant logistics and customs partners.
-
-We will proceed with processing your shipment and will notify you once it is on its way.
+We will update both the shipping fee and the delivery address in our system and proceed with shipping your order immediately. You will receive a tracking number once your order is dispatched.
 
 Best,
 Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// ===== RETURN → LENA =====
+// ===== CANCELLATION REQUESTS → LENA =====
 
-// #108694 - Return request (order #40233, wants to buy Move instead)
-add(108694, 'LENA', '3-order-lena', 'Return request #40233, wants to buy Move instead', `Hi Patti,
+// #108889 - Wants full refund (extra shipping $128.48)
+add(108889, 'LENA', '3-order-lena', 'Customer wants full refund — refused extra shipping fee', `Hi Ethan,
+
+Thank you for letting us know.
+
+We have received your request for a full refund. We will process the cancellation of your order and issue a full refund to your original payment method. You should see the refund reflected in your account within 5-10 business days.
+
+We sincerely apologize for the inconvenience and hope to serve you again in the future.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108885 - Cancel order (refuses extra shipping)
+add(108885, 'LENA', '3-order-lena', 'Customer wants to cancel — refused extra shipping fee', `Hi Chantal,
+
+Thank you for letting us know.
+
+We have received your request to cancel your order. We will process the cancellation and issue a full refund to your original payment method. The refund should appear in your account within 5-10 business days.
+
+We sincerely apologize for any inconvenience.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108880 - Cancel order (no import permit for Thailand)
+add(108880, 'LENA', '3-order-lena', 'Customer wants to cancel — no Thailand import permit', `Hi Natthakiat,
+
+Thank you for your response.
+
+We understand and will proceed with cancelling your order right away. We will issue a full refund to your original payment method. You should see the refund reflected in your account within 5-10 business days.
+
+We sincerely apologize that we were unable to fulfill your order and hope to serve you in the future.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108862 - Cancellation request order 41570
+add(108862, 'LENA', '3-order-lena', 'Cancellation request order #41570 — wants full refund', `Hi Ori,
 
 Thank you for reaching out.
 
-We can certainly help you with returning your current order (#40233) so you can purchase the Chessnut Move instead.
+We have received your request to cancel order #41570. We will process the cancellation and issue a full refund of $753.15 USD to your original payment method. The refund should appear in your account within 5-10 business days.
 
-To initiate the return, could you please confirm:
-1. The item is in its original packaging and unused
-2. Your current shipping address (for the return label)
-
-Once we have this information, we will send you a prepaid return label. Upon receipt of the returned item, we will process your refund within 5-10 business days.
+We will confirm once the cancellation has been completed.
 
 Best,
 Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// ===== DHL SHIPPING ISSUE → LENA =====
+// #108848 - Refund request order #38782 — 3 months, out of stock
+add(108848, 'LENA', '3-order-lena', 'Refund request order #38782 — 3 months delayed', `Hi Dana,
 
-// #108681 - DHL extension request for order #39434
-add(108681, 'LENA', '3-order-lena', 'DHL delivery issue for order #39434, needs address redirect', `Hi,
+We sincerely apologize for the extended delay and the frustration this has caused. You are right — waiting three months is unacceptable.
 
-Thank you for following up on order #39434.
+We will process a full refund for order #38782 immediately. You should see the refund reflected in your account within 5-10 business days.
 
-We are checking with DHL regarding the two-day extension request for the delivery. We will update you as soon as we hear back.
-
-If the extension is not approved, we will work with DHL to redirect the shipment to an alternative address. Please have the new recipient name and address ready so we can act quickly if needed.
-
-We will be in touch shortly with an update.
+We will confirm once the refund has been processed. Again, we are very sorry for the inconvenience.
 
 Best,
 Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// ===== MISSING PARCEL → LENA =====
+// ===== IMPORT TAX/DUTY ISSUE → LENA =====
 
-// #108775 - UPS marked delivered but not received
-add(108775, 'LENA', '3-order-lena', 'Missing parcel — UPS says delivered but customer has nothing', `Hi,
+// #108902 - FedEx asking for duty/import taxes, store said fees included
+add(108902, 'LENA', '3-order-lena', 'Customer charged import duty despite store saying fees included — order #35288', `Hi Thomas,
 
-We're sorry to hear that you haven't received your package. Let us help you look into this.
+Thank you for reaching out, and we sincerely apologize for this situation.
 
-Could you please provide us with:
-1. Your order number
-2. The shipping address on the order
+You are correct — our website states that customs fees and import taxes are included for EU customers. We will investigate this matter immediately with our logistics partner.
 
-In the meantime, we recommend:
-- Checking with neighbors or anyone else at the delivery address
-- Looking around the delivery area (side doors, porches, mailrooms)
-- Checking with your local UPS office
+Please do not pay the FedEx charges for now. We will work to resolve this on your behalf and ensure you are not responsible for these fees. We may need you to forward us the FedEx letter so we can process the reimbursement.
 
-Once we have your order details, we will file a trace request with UPS and work to resolve this as quickly as possible.
+We will get back to you as soon as possible with a resolution.
 
 Best,
 Lena
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// ===== PRODUCT INQUIRIES → GWEN (EVO/Move) =====
+// ===== THAILAND IMPORT PERMIT → JENNIFER =====
 
-// #108743 + #108740 + #108741 - George Hild: EVO + Go, app issues
-// Merge into one — use the most recent/detailed ticket
-add(108740, 'GWEN', '3-product-gwen', 'EVO app connection issue + forgot ID/password', `Hi,
+// #108922 - Asking for more details on permit for Thailand
+add(108922, 'JENNIFER', '5-fallback-jennifer', 'Customer asking for details on Thailand import permit', `Hi Pavat,
 
-Thank you for reaching out, and congratulations on your new Chessnut EVO!
+Thank you for your prompt response!
 
-To get your EVO connected to the Chessnut app, please follow these steps:
+The import permit required for shipping chessboards and wooden chess pieces to Thailand is issued by two agencies:
 
-1. Open the Chessnut app on your iPad
-2. If you're logged into your old account, go to Settings → Log Out
-3. If you forgot your password, tap "Forgot Password" on the login screen and enter your email to reset it
-4. Once logged in, tap the "+" button to add a new device
-5. Select "Chessnut EVO" and follow the on-screen pairing instructions
+1. **Thai Ministry of Agriculture** — for wooden chess pieces (wood import regulations)
+2. **Thai Industrial Standards Institute (TISI)** — for the chessboard electronics (UN3481, P.I.967-II battery classification)
 
-If you're still having trouble connecting, please make sure:
-- Your iPad's Bluetooth is turned on
-- The EVO is powered on and within range
-- The Chessnut app is updated to the latest version
+You would need to apply for these permits before we can ship. However, if obtaining the permit is not feasible, we can arrange a cancellation and full refund for your order.
 
-If you continue to experience issues, please let us know and we'll be happy to assist further.
+Please let us know how you would like to proceed.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== EVO / MOVE HARDWARE ISSUES → GWEN =====
+
+// #108918 - Chessnut Move defective piece base (French customer)
+add(108918, 'GWEN', '3-product-gwen', 'Move defective piece base — warranty replacement request', `Hi Jean-François,
+
+Thank you for reaching out, and we're glad to hear you're enjoying your Chessnut Move overall!
+
+We're sorry to hear about the defective piece base. Since your order is still under warranty, we will be happy to send you a replacement base.
+
+To process the warranty replacement, could you please provide:
+1. Your order number (#39814 confirmed)
+2. A photo of the defective base (showing the issue)
+3. The serial number of your Chessnut Move board (located on the bottom of the unit)
+
+Once we receive these details, we will arrange a replacement to be sent to you right away.
 
 Best,
 Gwen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108742 - Same person, iPad message about EVO/Go
-// Already covered by 108740
+// ===== EVO SOFTWARE → GWEN =====
 
-// #108720 - Move motor replacement pieces
-add(108720, 'GWEN', '3-product-gwen', 'Move replacement motor pieces request (6 motors)', `Hi,
-
-Thank you for your message, and we're glad to hear you're enjoying your Chessnut Move overall!
-
-We can help you with replacement motors for the plastic piece set. We currently offer replacement motors — please let us know which specific pieces you need (you mentioned 3 white and 3 black), and we will arrange the order for you.
-
-Regarding the software bug you mentioned (moves resetting after being made) — this has been addressed in recent firmware updates. Please make sure your Chessnut app and Move board firmware are updated to the latest versions. You can update the firmware through the Chessnut app under Settings → Device → Firmware Update.
-
-As for the kings' cross falling off — we apologize for the inconvenience. If you need replacement kings, please let us know and we can include them with your motor order.
-
-Could you also please provide your order number so we can process this efficiently?
-
-Best,
-Gwen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// ===== PRODUCT INQUIRIES → JENNIFER (Air/Pro/Go & fallback) =====
-
-// #108755 - David Greaver: How to buy replacement pieces for Go
-add(108755, 'JENNIFER', '3-product-jennifer', 'How to buy replacement pieces for Chessnut Go', `Hi David,
+// #108928 - Chessnut VIP subscription expired, EVO purchased on eBay
+add(108928, 'GWEN', '3-product-gwen', 'EVO VIP subscription expired — purchased on eBay', `Hi,
 
 Thank you for reaching out!
 
-Replacement pieces for the Chessnut Go are available. You can order them directly from our website at https://www.chessnutech.com, or if you let us know which specific pieces you need, we can help you place the order.
+The Chessnut VIP training subscription is a separate service from the hardware. Since your EVO was purchased secondhand on eBay, the previous owner's subscription may have expired.
 
-Could you also please share your order number so we can verify your purchase and assist you more efficiently?
+To purchase or renew a Chessnut VIP training subscription, please visit:
+https://www.chessnutech.com
+
+If you don't see the subscription option on our website, it may be that the training feature is currently bundled only with new EVO purchases. Please provide us with:
+1. Your EVO's serial number (located on the bottom of the board)
+2. The email address associated with your Chessnut app account
+
+We'll check the status and let you know the best way to activate training on your device.
+
+Best,
+Gwen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== PRODUCT QUESTIONS → JENNIFER =====
+
+// #108936 - Order question: return period + payment options
+add(108936, 'JENNIFER', '3-product-jennifer', 'Product inquiry — return period and payment options', `Hi Damien,
+
+Thank you for reaching out!
+
+Here's the information you requested:
+
+**Return Policy:** We offer a 30-day return policy from the date of delivery. Items must be in their original packaging and unused condition.
+
+**Payment Options:** We accept the following payment methods on our website (https://www.chessnutech.com):
+- Credit/Debit Cards (Visa, Mastercard, American Express)
+- PayPal
+- Apple Pay / Google Pay
+
+If you have any other questions, please don't hesitate to ask!
 
 Best,
 Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108752 - Mike Stav: Manual/standalone use without phone
-add(108752, 'JENNIFER', '3-product-jennifer', 'Can Go work without smartphone/Bluetooth?', `Hi Mike,
+// ===== VENDOR/W9 REQUEST → JENNIFER (fallthrough) =====
 
-Thank you for your great question!
+// #108903 - W9 and vendor setup form request (school district)
+add(108903, 'JENNIFER', '5-fallback-jennifer', 'Vendor setup/W9 request — school district PO', `Hi Dana,
 
-The Chessnut Go does require a smartphone or tablet with Bluetooth to access most of its features, including playing against the built-in AI and setting up chess problems. The board itself does not have a standalone screen or interface — it connects to the Chessnut app to provide the full experience.
+Thank you for reaching out.
 
-Here's what you can do with the app:
-- Play against adaptive AI at various difficulty levels
-- Set up and solve chess puzzles
-- Play online on platforms like Chess.com and Lichess
-- Analyze your games
+We appreciate your interest in working with Chessnut. However, we currently handle all sales through our online store at https://www.chessnutech.com and do not have a vendor setup process for purchase orders at this time.
 
-You can find the full user manual in the Chessnut app under Settings → Help, or on our website at https://www.chessnutech.com/support.
-
-If you don't have a smartphone, you can also use a tablet (iPad or Android tablet) with the Chessnut app.
-
-Please let us know if you have any other questions!
+If you're looking to place a bulk order for your school district, please let us know the quantity and product(s) you're interested in, and we can explore options for you.
 
 Best,
 Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108714 - Chessnut Go Bluetooth connection issue
-add(108714, 'JENNIFER', '3-product-jennifer', 'Chessnut Go Bluetooth pairing issue', `Hi,
+// ===== ORDER CONFIRMATION (FROM SHOPIFY) → JENNIFER =====
 
-Thank you for reaching out, and sorry for the trouble with connecting your Chessnut Go.
+// #108882 - "My order ???" — just a signature block, no clear request
+add(108882, 'JENNIFER', '5-fallback-jennifer', 'Unclear inquiry — signature block only, no order number or clear question', `Hi,
 
-The issue you're describing (board appears briefly then disappears) is a known pairing issue that can usually be resolved with these steps:
-
-1. Forget the device: Go to your phone's Bluetooth settings, find "Chessnut Go" in the paired devices list, and tap "Forget This Device"
-2. Restart the board: Turn off the Chessnut Go, wait 10 seconds, then turn it back on
-3. Restart Bluetooth: Turn Bluetooth off on your phone, wait 5 seconds, then turn it back on
-4. Re-open the app: Close the Chessnut app completely (swipe it away from recent apps), then re-open it
-5. Pair through the app: In the Chessnut app, tap "+" to add a device and follow the pairing prompts — do NOT pair from your phone's Bluetooth settings directly
-
-If the issue persists after these steps, please let us know:
-- Your phone model and OS version
-- The version of the Chessnut app you're using (found in Settings → About)
-
-We'll be happy to assist further.
+Thank you for reaching out. Could you please provide your order number and let us know how we can assist you? We'd be happy to help!
 
 Best,
 Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108675 - Go black king missing magnet
-add(108675, 'JENNIFER', '3-product-jennifer', 'Chessnut Go black king missing magnet (defect)', `Hi Hannah,
+// ===== SHOPIFY INBOX MESSAGES → JENNIFER =====
 
-Thank you for reaching out, and we're sorry to hear about the issue with the black king piece.
+// #108883 - Dana Abed "I haven't even received it!" (Shopify inbox notification)
+add(108883, 'JENNIFER', '5-fallback-jennifer', 'Shopify inbox — Dana Abed: has not received order', `Hi Dana,
 
-We'd be happy to send you a replacement. Before we process this, could you please provide:
-1. Your order number
-2. A photo or short video showing the issue (the king sliding off the board)
+We're sorry to hear you haven't received your order yet. Could you please provide your order number so we can check the status and tracking details for you?
 
-Once we receive these details, we'll arrange a replacement black king to be sent to you right away.
+We will look into this right away.
 
 Best,
 Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108676 - Can you play with bot with Chessnut Go?
-add(108676, 'JENNIFER', '3-product-jennifer', 'Can you play bot with Chessnut Go?', `Hi Vihaan,
+// #108822 - Brad Jackson asking about order #40201 shipping status
+add(108822, 'JENNIFER', '5-fallback-jennifer', 'Shopify inbox — Brad Jackson: order #40201 shipping status', `Hi Brad,
 
-Yes, absolutely! The Chessnut Go supports playing against AI bots through the Chessnut app.
+Thank you for reaching out. We apologize for the delay with your order #40201.
 
-Here's how:
-1. Download the Chessnut app (iOS or Android)
-2. Connect your Chessnut Go via Bluetooth
-3. Select "Play vs AI" mode
-4. Choose your preferred difficulty level
+We are checking on the current status and will provide you with an update as soon as possible. We will send you the tracking information once your order has been dispatched.
 
-The AI adapts to your skill level, making it great for both beginners and experienced players.
+Thank you for your patience.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108818 - Kay Tang: Can EVO be used in Malaysia? Warranty?
+add(108818, 'JENNIFER', '3-product-jennifer', 'Product inquiry — EVO in Malaysia + warranty', `Hi Kay,
+
+Thank you for your interest in the Chessnut EVO!
+
+Yes, the Chessnut EVO can be used in Malaysia. It works globally as long as you have a Wi-Fi connection for online features and the Chessnut app (available on iOS and Android).
+
+**Warranty:** We offer a 1-year manufacturer's warranty covering hardware defects. The warranty applies regardless of your location. If you experience any issues, you can contact us directly and we will assist with repairs or replacements.
+
+You can order directly from our website at https://www.chessnutech.com, and we ship internationally.
 
 Let us know if you have any other questions!
 
@@ -485,237 +510,268 @@ Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108692 - Do you deliver across Europe?
-add(108692, 'JENNIFER', '5-fallback-jennifer', 'Delivery to Europe inquiry', `Hi,
+// #108817 - Lurajim Jimenez: "status of my order"
+add(108817, 'JENNIFER', '5-fallback-jennifer', 'Shopify inbox — Lurajim Jimenez: order status', `Hi Lurajim,
 
-Yes, we do deliver across Europe! We ship to most European countries from our EU warehouse.
+Thank you for reaching out. Could you please provide your order number so we can check the status of your order for you?
 
-You can place your order directly on our website at https://www.chessnutech.com, and shipping costs and estimated delivery times will be calculated at checkout based on your location.
-
-If you have any specific questions about delivery to your country, please let us know!
+We will look into it right away.
 
 Best,
 Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// #108677 - Move wooden pieces restock ETA
-add(108677, 'JENNIFER', '5-fallback-jennifer', 'Chessnut Move (wooden pieces) restock ETA', `Hi Victoria,
-
-Thank you for your pre-order and your patience!
-
-The Chessnut Move with wooden pieces is currently being restocked. We expect to have new inventory available soon and will ship pre-orders as soon as stock arrives.
-
-We will send you an update with tracking information once your order ships. If you have any questions in the meantime, please don't hesitate to reach out.
-
-Best,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108703 - Which e-board for first one?
-add(108703, 'JENNIFER', '5-fallback-jennifer', 'Product recommendation for first e-board', `Hi Jeffrey,
-
-Great question! Here's a quick overview to help you decide:
-
-**Chessnut Go ($180)** — Best for beginners. Compact, lightweight, great value. Pairs with the Chessnut app for AI play and online chess.
-
-**Chessnut Air ($300-$400)** — Step up with a beautiful wooden board, LED move indicators, and a more premium feel. Great for home use.
-
-**Chessnut Pro ($500-$600)** — Our premium board with tournament-quality pieces, advanced AI features, and a larger playing surface.
-
-**Chessnut Move ($700+)** — Our flagship with motorized pieces that move on their own! The ultimate chess experience.
-
-For a first e-board, we typically recommend the **Chessnut Go** or **Chessnut Air** depending on your budget. Both offer an excellent experience and work with popular platforms like Chess.com and Lichess.
-
-Feel free to ask if you'd like more details on any of these!
-
-Best,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108678 - Sumi P: "Hi" (unclear)
-add(108678, 'JENNIFER', '5-fallback-jennifer', 'Brief greeting, unclear intent', `Hi,
-
-Thank you for reaching out to Chessnut! How can we help you today?
-
-Best,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108700 - KOL/sponsorship request (junior chess player)
-add(108700, 'JENNIFER', '5-kol-jennifer', 'KOL/sponsorship request — junior chess player', `Hi Yuliaty,
-
-Thank you for reaching out and for sharing Yvon's impressive chess achievements! It's wonderful to see young players excelling in the sport.
-
-We appreciate your interest in sponsorship support for the World Youth Championship. This sounds like a fantastic opportunity for Yvon.
-
-We'd like to review this request with our team. Could you please provide:
-1. A brief proposal outlining what you're looking for (product sponsorship, financial support, etc.)
-2. Any social media or content channels where Yvon shares her chess journey
-
-We'll forward this to the relevant team and get back to you as soon as possible.
-
-Best regards,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108774 - Collaboration: cinematic video (KOL/filmmaker)
-add(108774, 'JENNIFER', '5-kol-jennifer', 'KOL collaboration — cinematic product video', `Hi Yuri,
-
-Thank you for reaching out! Your portfolio is impressive, and we love the idea of showcasing our products in a cinematic style.
-
-We'd be interested in discussing this collaboration further. Could you please share:
-1. Your rates for a product video (60-90 seconds)
-2. Your typical turnaround time
-3. Any examples of similar product videos you've created for tech/consumer brands
-
-We'll review this with our marketing team and get back to you shortly.
-
-Best regards,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108682 - Bulk order 500 Move to Kazakhstan
-add(108682, 'JENNIFER', '5-fallback-jennifer', 'Bulk order inquiry — 500 Chessnut Move to Kazakhstan', `Hi,
-
-Thank you for your interest in ordering Chessnut Move boards in bulk!
-
-For large orders like this, we'd like to connect you with our sales team who can provide:
-- Volume pricing and discounts
-- Shipping logistics for delivery to Kazakhstan
-- Payment terms and invoicing options
-
-Could you please provide:
-1. Your company name and contact details
-2. Your preferred timeline for delivery
-3. Any specific customization requirements
-
-We'll have our sales team reach out to you directly to discuss the details.
-
-Best regards,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// ===== REPLY TO AGENT → JENNIFER =====
-
-// #108737 - Shahaf: "I don't see any change, it's been a month, ceasefire is over, ship ASAP"
-add(108737, 'JENNIFER', '5-fallback-jennifer', 'Customer frustrated — order from March 10, airspace excuse invalid', `Hi Shahaf,
-
-Thank you for your message, and we sincerely apologize for the continued delay.
-
-We understand your frustration — a month is too long to wait. We are prioritizing your order and working to get it shipped immediately. Now that the airspace situation has been resolved, we will arrange shipment right away.
-
-We will send you the tracking information within the next 1-2 business days.
-
-Thank you for your patience, and again, we apologize for the inconvenience.
-
-Best,
-Jennifer Chen
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// ===== PAYPAL DISPUTES → JONY =====
-const paypalDraft = `Hi,
-
-We have received notification of a PayPal dispute that requires immediate attention. This has been escalated to the appropriate team for handling.
-
-Best,
-Jony He
-Customer Service Representative, Chessnut
-https://chessnutech.com`;
-
-// #108787 - PayPal case PP-R-JQF-621585046 ($838.99)
-add(108787, 'JONY', '2-case-jony', 'PayPal dispute — PP-R-JQF-621585046, $838.99', paypalDraft);
-
-// #108786 - Same case escalated to claim
-add(108786, 'JONY', '2-case-jony', 'PayPal dispute escalated — PP-R-JQF-621585046', paypalDraft);
-
-// #108785 - Same case, buyer response
-add(108785, 'JONY', '2-case-jony', 'PayPal dispute — buyer response PP-R-JQF-621585046', paypalDraft);
-
-// #108778 - Same case, reminder closes April 12
-add(108778, 'JONY', '2-case-jony', 'PayPal dispute URGENT — PP-R-JQF-621585046 closes Apr 12', `Hi,
-
-URGENT: We have received a reminder that PayPal dispute PP-R-JQF-621585046 ($838.99) will be automatically closed on April 12, 2026 if not escalated. This requires immediate action.
-
-Please ensure all relevant evidence (shipping confirmation, tracking info, delivery proof) is submitted to the PayPal Resolution Center before the deadline.
-
-Best,
-Jony He
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108734 - PayPal case PP-R-CFN-623797962 ($799.00)
-add(108734, 'JONY', '2-case-jony', 'PayPal dispute — PP-R-CFN-623797962, $799.00', paypalDraft);
-
-// #108718 - Payoneer dispute (arne.theisen@gmx.net, $679.15)
-add(108718, 'JONY', '2-case-jony', 'Payoneer dispute — $679.15, arne.theisen@gmx.net', `Hi,
-
-We have received notification of a Payoneer dispute for transaction roYbJkQw0UAHJh3qzuQ2uR5ko ($679.15) from customer arne.theisen@gmx.net.
-
-Please log into your Payoneer account and navigate to Checkout > Disputes to review and respond with shipping/tracking evidence before the deadline.
-
-Best,
-Jony He
-Customer Service Representative, Chessnut
-https://chessnutech.com`);
-
-// #108673 - Grand Philippe: Will Move pieces/batteries be sold separately?
-add(108673, 'JENNIFER', '3-product-jennifer', 'Product inquiry — will Move pieces/batteries be sold separately?', `Hi Philippe,
+// #108814 - Anthony Stokes: How to redeem chessmind benefits?
+add(108814, 'JENNIFER', '3-product-jennifer', 'Product inquiry — how to redeem ChessMind benefits', `Hi Anthony,
 
 Thank you for reaching out!
 
-Currently, replacement pieces and batteries for the Chessnut Move are not yet available for separate purchase on our website. However, we are working to make them available soon.
+To redeem your ChessMind benefits:
+1. Download the Chessnut app (iOS or Android) if you haven't already
+2. Log in or create an account
+3. Connect your Chessnut board via Bluetooth
+4. Go to Settings → Subscription or ChessMind to activate your benefits
 
-If you need replacement parts urgently, please contact us directly with details of what you need, and we will do our best to assist you.
+If your ChessMind subscription was included with your purchase, it should activate automatically once you connect your board. If you're seeing an error, please let us know your order number and we'll look into it for you.
 
 Best,
 Jennifer Chen
 Customer Service Representative, Chessnut
 https://chessnutech.com`);
 
-// Manual closes for tickets NOT caught by fetch_tickets.js spam detection
-// These are tickets from toAnalyze that need to be closed (duplicates, auto-closed cases, etc.)
-// Auto-inherit from pending.toClose handles the rest
-const manualCloses = [
-  { id: 108710, reason: 'paypal-case-auto-closed' },  // PayPal auto-closed, not spam
-  { id: 108743, reason: 'duplicate-of-108740' },       // George Hild duplicate
-  { id: 108742, reason: 'duplicate-of-108740' },       // George Hild duplicate
-  { id: 108741, reason: 'duplicate-of-108740' },       // George Hild duplicate
-];
-manualCloses.forEach(c => {
-  if (!toClose.find(x => x.id === c.id)) toClose.push(c);
-});
+// #108813 - Micky Nachtigall: How to update firmware on Chessnut Pro?
+add(108813, 'JENNIFER', '3-product-jennifer', 'Product inquiry — firmware update for Chessnut Pro', `Hi Micky,
 
+Thank you for reaching out!
+
+To update the firmware on your Chessnut Pro:
+1. Open the Chessnut app on your smartphone or tablet
+2. Connect your Chessnut Pro via Bluetooth
+3. Go to Settings → Device → Firmware Update
+4. If an update is available, tap "Update" and follow the on-screen instructions
+5. Keep your board connected and powered on during the update
+
+Please make sure your board has sufficient battery before starting the update process.
+
+If you encounter any issues during the update, please let us know and we'll be happy to assist.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108804 - Anthony Stokes: Cannot find ChessMind
+add(108804, 'JENNIFER', '3-product-jennifer', 'Product inquiry — cannot find ChessMind feature', `Hi Anthony,
+
+Thank you for reaching out.
+
+The ChessMind feature is available through the Chessnut app. Please make sure:
+1. You have the latest version of the Chessnut app installed
+2. Your Chessnut board is connected via Bluetooth
+3. You're logged into your Chessnut account
+
+If you still don't see the ChessMind feature, it may be available under a different menu. Please check:
+- The main screen after connecting your board
+- Settings → Features or Subscriptions
+
+Could you also let us know which Chessnut board you're using? This will help us provide more specific guidance.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== SHOPIFY INBOX — PRODUCT QUESTIONS (SPANISH) =====
+
+// #108879 + #108878 - Jesús de la Cruz Romeral: wants to buy board, needs help choosing, wants Spanish
+add(108878, 'JENNIFER', '3-product-jennifer', 'Product inquiry (Spanish) — customer needs help choosing a board', `Hi Jesús,
+
+Thank you for reaching out!
+
+We'd be happy to help you choose the right electronic chess board. Here's a quick overview of our models:
+
+**Chessnut Go** — Compact and affordable, great for beginners. Works with the Chessnut app for AI play and online chess.
+
+**Chessnut Air** — Beautiful wooden board with LED move indicators. Great for home use and online play.
+
+**Chessnut Pro** — Premium board with tournament-quality pieces and advanced features.
+
+**Chessnut Move** — Our flagship with motorized pieces that move on their own!
+
+You can see the full details and pricing at https://www.chessnutech.com. While our website and app are primarily in English, the boards work internationally.
+
+If you have any specific questions about a particular model, please let us know!
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108879 - Same customer, asking about prices
+// Already covered by 108878
+
+// ===== SHOPIFY INBOX — PRO COMPATIBILITY =====
+
+// #108877 - Victor Narat: Is Chessnut Pro compatible with Chesstempo and Chessable?
+add(108877, 'JENNIFER', '3-product-jennifer', 'Product inquiry — Chessnut Pro compatibility with Chesstempo/Chessable', `Hi Victor,
+
+Thank you for your question!
+
+The Chessnut Pro is compatible with popular chess platforms including Chess.com and Lichess through the Chessnut app. 
+
+Regarding Chesstempo and Chessable: the Chessnut Pro can work with these platforms if they support external board input. However, direct integration may vary. We recommend checking each platform's settings for external board/hardware connection options.
+
+For the best experience, the Chessnut Pro works seamlessly with:
+- Chess.com (via the Chessnut app)
+- Lichess (via the Chessnut app)
+- The built-in Chessnut AI
+
+If you need help setting up the connection, please let us know!
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== PRODUCT ISSUE — BOTS NOT LOADING =====
+
+// #108855 - "Never mind.. Chess.com issue; not a Chessnut issue" (resolved)
+add(108855, 'JENNIFER', '5-fallback-jennifer', 'Customer resolved own issue — Chess.com problem, not Chessnut', null);
+
+// #108845 - Problem Playing Bots (same customer as 108855, original message)
+add(108845, 'JENNIFER', '5-fallback-jennifer', 'Bot loading issue — likely Chess.com related', `Hi Ken,
+
+Thank you for reaching out.
+
+The issue you're describing with bots not loading is typically related to the chess platform (Chess.com or Lichess) rather than the Chessnut board itself. Here are a few things to try:
+
+1. Make sure the Chessnut app is updated to the latest version
+2. Try disconnecting and reconnecting your board via Bluetooth
+3. Check if the issue occurs on the chess platform's website or app independently
+
+If the problem persists specifically when using your Chessnut board (but not when using the platform directly), please let us know and we'll investigate further.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== ORDER DELIVERY INQUIRY =====
+
+// #108893 - Nina Tremblay: "When should I expect my order to be delivered?"
+add(108893, 'JENNIFER', '5-fallback-jennifer', 'Shopify inbox — Nina Tremblay: delivery timeline', `Hi Nina,
+
+Thank you for reaching out. Could you please provide your order number so we can check the expected delivery timeline for you?
+
+We will look into the status right away.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108890 - Nina Tremblay: "Track my order"
+add(108890, 'JENNIFER', '5-fallback-jennifer', 'Shopify inbox — Nina Tremblay: track my order', `Hi Nina,
+
+To help you track your order, could you please provide your order number? We will look up the tracking details and send them to you right away.
+
+Best,
+Jennifer Chen
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// #108888 - Nina Tremblay: extra shipping fee for order 41259 ($141.33)
+add(108888, 'LENA', '3-order-lena', 'Shopify inbox — Nina Tremblay: extra shipping fee for order #41259', `Hi Nina,
+
+Thank you for confirming. We have noted the additional shipping fee of $141.33 for order #41259.
+
+We will proceed with shipping your order right away. You will receive a tracking number via email once your order has been dispatched.
+
+Best,
+Lena
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== PAYPAL DISPUTE → JONY =====
+
+// #108860 - PayPal case PP-R-QTN-623023036 ($758.10)
+add(108860, 'JONY', '2-case-jony', 'PayPal dispute — PP-R-QTN-623023036, $758.10', `Hi,
+
+We have received notification of a PayPal dispute that requires immediate attention.
+
+Case ID: PP-R-QTN-623023036
+Disputed Amount: $758.10 USD
+Buyer: James Mathews (jamesmthews@yahoo.com)
+
+Please log into your PayPal account and navigate to the Resolution Center to review and respond with shipping/tracking evidence before the deadline.
+
+Best,
+Jony He
+Customer Service Representative, Chessnut
+https://chessnutech.com`);
+
+// ===== SPAM / AUTO-CLOSE =====
+
+// #108896 - fuuffy.com shipping notification (Chinese) — sender spam
+add(108896, 'CLOSE', 'spam', 'Sender spam — fuuffy.com shipping notification', null);
+
+// #108894 - Bounce email from no-reply@mailsupport.aliyun.com → JENNIFER
+add(108894, 'JENNIFER', '5-fallback-jennifer', 'Bounce email — mail delivery failed', null);
+
+// #108886 - Marketing spam (growth assistant pitch)
+add(108886, 'CLOSE', 'spam', 'Content spam — marketing pitch email', null);
+
+// #108875 - Amazon notification (Spanish) — sender spam
+add(108875, 'CLOSE', 'spam', 'Sender spam — Amazon notification email', null);
+
+// #108873 - Bounce email from no-reply@mailsupport.aliyun.com → JENNIFER
+add(108873, 'JENNIFER', '5-fallback-jennifer', 'Bounce email — mail delivery failed (iCloud over quota)', null);
+
+// #108829 - Facebook group request (Dartsnut) — not relevant
+add(108829, 'CLOSE', 'spam', 'Content spam — Facebook group request for Dartsnut', null);
+
+// #108826 - Shopify promotional email
+add(108826, 'CLOSE', 'spam', 'Sender spam — Shopify promotional email', null);
+
+// #108819 - Amazon notification (Chinese) — empty body
+add(108819, 'CLOSE', 'spam', 'Content spam — Amazon notification (empty body)', null);
+
+// #108808 - 貨飛 shipping notification (Chinese) — not Chessnut related
+add(108808, 'CLOSE', 'spam', 'Content spam — 貨飛 shipping notification (not Chessnut)', null);
+
+// #108807 - 貨飛 shipping notification (duplicate)
+add(108807, 'CLOSE', 'spam', 'Content spam — 貨飛 shipping notification duplicate', null);
+
+// #108806 - Amazon FBA notification
+add(108806, 'CLOSE', 'spam', 'Sender spam — Amazon FBA notification', null);
+
+// ===== DEDUP: tickets 108879 and 108804 (Anthony Stokes duplicate) =====
+// 108879 already handled (Spanish customer, covered by 108878)
+
+// ===== FILTER: Remove tickets already assigned from toClose =====
 const assignIds = new Set(assignments.map(a => a.id));
 const filteredClose = toClose.filter(c => !assignIds.has(c.id));
 
-// Assign remaining unprocessed tickets that match specific patterns
-for (const t of pending.toAnalyze) {
-  if (assignments.find(a => a.id === t.id)) continue;
-  if (toClose.find(c => c.id === t.id)) continue;
-  const subj = (t.subject || '').toLowerCase();
-  // "Balance paid for order" → Jennifer (order confirmation reply)
-  if (subj.includes('balance paid for order')) {
-    add(t.id, 'JENNIFER', '3-product-jennifer', 'Balance paid for order — needs follow-up',
-      `Hi,\n\nThank you for your payment. Your order has been fully paid and we are processing it for shipment.\n\nWe will send you the tracking information once your order has been dispatched.\n\nIf you have any questions, please don't hesitate to reach out.\n\nBest,\nJennifer Chen\nCustomer Service Representative, Chessnut\nhttps://chessnutech.com`);
+// Also add any CLOSE assignments to toClose
+assignments.filter(a => a.assignee === 'CLOSE').forEach(a => {
+  if (!filteredClose.find(c => c.id === a.id)) {
+    filteredClose.push({ id: a.id, reason: a.reason });
   }
-}
+});
+
+// Remove CLOSE entries from assignments (they go to toClose instead)
+const finalAssignments = assignments.filter(a => a.assignee !== 'CLOSE');
 
 const output = {
   timestamp: new Date().toISOString(),
   toClose: filteredClose,
-  assignments
+  assignments: finalAssignments
 };
 
 fs.writeFileSync(__dirname + '/triage_decisions.json', JSON.stringify(output, null, 2));
 console.log('Generated triage_decisions.json');
-console.log('  To close:', filteredClose.length, '(from pending:', pending.toClose.length, '+ manual:', manualCloses.length, ')');
-console.log('  Assignments with draft:', assignments.filter(a => a.draft_reply).length);
-console.log('  Assignments without draft:', assignments.filter(a => !a.draft_reply).length);
+console.log('  To close:', filteredClose.length, '(from pending:', pending.toClose.length, ')');
+console.log('  Assignments:', finalAssignments.length);
+console.log('  With draft:', finalAssignments.filter(a => a.draft_reply).length);
+console.log('  Without draft:', finalAssignments.filter(a => !a.draft_reply).length);
