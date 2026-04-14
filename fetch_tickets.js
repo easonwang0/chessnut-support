@@ -65,15 +65,30 @@ const isContentSpam = (text) => {
 };
 
 (async () => {
-  let all=[], page=1, empty=0;
-  while(true){
+  // Scan past N hours by creation time (full scan, not view-based)
+  const hours = parseInt(process.argv[2]) || 8;
+  const since = new Date(Date.now() - hours * 3600 * 1000).toISOString();
+  console.log('Scanning tickets since: ' + since + ' (' + hours + 'h window)');
+
+  let all=[], page=1, done=false;
+  while(!done){
     if(page>1) await sleep(1000);
-    const r = await request('/tickets?filter=new_and_my_open&per_page=100&page='+page);
-    if(!Array.isArray(r)||r.length===0){empty++;if(empty>=2)break;page++;continue;}
-    empty=0; all=all.concat(r); page++;
+    const r = await request('/tickets?page='+page+'&per_page=100&order_type=desc&order_by=created_at');
+    if(!Array.isArray(r)||r.length===0) break;
+    for(const t of r){
+      if(t.created_at && t.created_at >= since){
+        all.push(t);
+      } else {
+        done = true; // oldest on this page is outside window
+        break;
+      }
+    }
+    if(r.length < 100) break;
+    page++;
   }
 
-  const triageTags = new Set(['auto-spam-closed','sender-based','2-case-jony','3-product-gwen','3-product-jennifer','3-software-jennifer','3-product-ambiguous','4-order-lena','5-kol-jennifer','5-fallback-jennifer','ai-triaged','ai-suggest-close']);
+  // Unified tag set — must match freshdesk-catchup.py TAGS_SKIP
+  const triageTags = new Set(['auto-spam-closed','ai-triaged','ai-draft-ready','ai-suggest-close','sender-based','2-case-jony','2-dispute-jony','3-product-gwen','3-product-jennifer','3-software-jennifer','3-product-ambiguous','4-order-lena','5-kol-jony','5-kol-jennifer','5-fallback-jennifer']);
 
   const targets = all.filter(t => {
     if(t.status===5) return false;
