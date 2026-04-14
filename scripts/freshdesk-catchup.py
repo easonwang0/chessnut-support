@@ -28,8 +28,11 @@ def api(method, path, body=None):
 
 def get(path): return api("GET", path)
 
-TAGS_SKIP = {"auto-spam-closed","2-dispute-jony","3-product-gwen","3-product-jennifer",
-             "4-order-lena","5-kol-jony","5-fallback-jennifer","ai-draft-ready"}
+# Unified tag set — must match fetch_tickets.js triageTags
+TAGS_SKIP = {"auto-spam-closed","ai-triaged","ai-draft-ready","ai-suggest-close",
+             "sender-based","2-case-jony","2-dispute-jony",
+             "3-product-gwen","3-product-jennifer","3-software-jennifer","3-product-ambiguous",
+             "4-order-lena","5-kol-jony","5-kol-jennifer","5-fallback-jennifer"}
 PROTECTED = set(FD.get("protected_groups", []))
 
 hours = int(sys.argv[1]) if len(sys.argv) > 1 else 24

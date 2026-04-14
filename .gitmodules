@@ -1,0 +1,3 @@
+[submodule "skills/chessnut-support"]
+	path = skills/chessnut-support
+	url = https://github.com/easonwang0/chessnut-support.git
