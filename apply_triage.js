@@ -80,9 +80,11 @@ const agentMap = {
           continue;
         }
         const tags = existing.tags||[];
+        // Truncate reason to 32 chars (Freshdesk tag limit)
+        const reasonTag = (item.reason||'ai-spam').substring(0,32);
         const closeRes = await request('/tickets/'+item.id,'PUT',{
           status:5, group_id:null,
-          tags:[...tags, 'auto-spam-closed', item.reason||'ai-spam']
+          tags:[...tags, 'auto-spam-closed', reasonTag]
         });
         if(closeRes._httpError) {
           log.errors.push('Close #'+item.id+': HTTP '+closeRes._httpError);
@@ -120,7 +122,7 @@ const agentMap = {
         await sleep(1000);
         const existing = await request('/tickets/'+a.id);
         const tags = existing.tags||[];
-        const stage = a.stage || ('ai-'+a.assignee.toLowerCase());
+        const stage = (a.stage || ('ai-'+a.assignee.toLowerCase())).substring(0,32);
 
         // Double-check via API tags too (belt and suspenders)
         if(tags.includes('ai-triaged') || tags.includes(stage)){
