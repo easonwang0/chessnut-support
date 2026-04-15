@@ -70,7 +70,7 @@ const agentMap = {
         continue;
       }
       try{
-        await sleep(800);
+        await sleep(1000);
         const existing = await request('/tickets/'+item.id);
         if(existing.status === 5 || (existing.tags||[]).includes('auto-spam-closed')){
           state.closed[item.id] = { reason: item.reason, time: new Date().toISOString() };
@@ -87,6 +87,7 @@ const agentMap = {
         if(closeRes._httpError) {
           log.errors.push('Close #'+item.id+': HTTP '+closeRes._httpError);
           console.error('  Error closing #'+item.id+': HTTP '+closeRes._httpError);
+          if(closeRes._httpBody) console.error('    Response: '+closeRes._httpBody);
           continue;
         }
         state.closed[item.id] = { reason: item.reason, time: new Date().toISOString() };
@@ -116,7 +117,7 @@ const agentMap = {
           console.error('  Unknown agent for #'+a.id+': '+a.assignee);
           continue;
         }
-        await sleep(800);
+        await sleep(1000);
         const existing = await request('/tickets/'+a.id);
         const tags = existing.tags||[];
         const stage = a.stage || ('ai-'+a.assignee.toLowerCase());
@@ -134,6 +135,7 @@ const agentMap = {
         if(assignRes._httpError) {
           log.errors.push('Assign #'+a.id+': HTTP '+assignRes._httpError);
           console.error('  Error assigning #'+a.id+': HTTP '+assignRes._httpError);
+          if(assignRes._httpBody) console.error('    Response: '+assignRes._httpBody);
           continue;
         }
         const tagRes = await request('/tickets/'+a.id,'PUT',{tags:[...tags, 'ai-triaged', stage]});
@@ -149,7 +151,7 @@ const agentMap = {
 
         // Write draft reply as private note
         if(a.draft_reply){
-          await sleep(800);
+          await sleep(1000);
           await request('/tickets/'+a.id+'/notes','POST',{
             body: '<b>[AI Draft Reply]</b><br><br>'+a.draft_reply.replace(/\n/g,'<br>'),
             private: true
