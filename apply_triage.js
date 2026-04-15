@@ -8,12 +8,28 @@ const AUTH = 'Basic ' + Buffer.from(API_KEY + ':X').toString('base64');
 const AGENTS = { GWEN:150033754311, LENA:150073233500, JENNIFER:150023804601, JONY:150022830364 };
 const STATE_FILE = __dirname + '/triage_state.json';
 
-function request(path, method, data) {
+function request(path, method, data, retries) {
+  retries = retries || 0;
   return new Promise((resolve, reject) => {
     const req = https.request({ hostname: DOMAIN, path: '/api/v2'+path, method: method||'GET',
       headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' }
     }, res => { let body=''; res.on('data', c => body+=c);
-      res.on('end', () => { try{resolve(body?JSON.parse(body):{})}catch(e){resolve({error:true})} }); });
+      res.on('end', async () => {
+        if(res.statusCode === 429 && retries < 3) {
+          const wait = Math.pow(2, retries) * 2000; // 2s, 4s, 8s
+          console.log('    Rate limited (429), retrying in '+wait+'ms...');
+          await sleep(wait);
+          try { resolve(await request(path, method, data, retries+1)); } catch(e) { reject(e); }
+          return;
+        }
+        let parsed;
+        try{ parsed = body ? JSON.parse(body) : {}; } catch(e) { parsed = {error:true, statusCode: res.statusCode}; }
+        if(res.statusCode >= 400) {
+          parsed._httpError = res.statusCode;
+          parsed._httpBody = body.substring(0, 200);
+        }
+        resolve(parsed);
+      }); });
     req.on('error', reject); if(data) req.write(JSON.stringify(data)); req.end();
   });
 }
@@ -54,7 +70,7 @@ const agentMap = {
         continue;
       }
       try{
-        await sleep(400);
+        await sleep(800);
         const existing = await request('/tickets/'+item.id);
         if(existing.status === 5 || (existing.tags||[]).includes('auto-spam-closed')){
           state.closed[item.id] = { reason: item.reason, time: new Date().toISOString() };
@@ -64,10 +80,15 @@ const agentMap = {
           continue;
         }
         const tags = existing.tags||[];
-        await request('/tickets/'+item.id,'PUT',{
+        const closeRes = await request('/tickets/'+item.id,'PUT',{
           status:5, group_id:null,
           tags:[...tags, 'auto-spam-closed', item.reason||'ai-spam']
         });
+        if(closeRes._httpError) {
+          log.errors.push('Close #'+item.id+': HTTP '+closeRes._httpError);
+          console.error('  Error closing #'+item.id+': HTTP '+closeRes._httpError);
+          continue;
+        }
         state.closed[item.id] = { reason: item.reason, time: new Date().toISOString() };
         saveState(state);
         log.closed.push('#'+item.id+' ('+item.reason+')');
@@ -95,7 +116,7 @@ const agentMap = {
           console.error('  Unknown agent for #'+a.id+': '+a.assignee);
           continue;
         }
-        await sleep(400);
+        await sleep(800);
         const existing = await request('/tickets/'+a.id);
         const tags = existing.tags||[];
         const stage = a.stage || ('ai-'+a.assignee.toLowerCase());
@@ -109,8 +130,18 @@ const agentMap = {
           continue;
         }
 
-        await request('/tickets/'+a.id,'PUT',{group_id:null, responder_id:agentId});
-        await request('/tickets/'+a.id,'PUT',{tags:[...tags, 'ai-triaged', stage]});
+        const assignRes = await request('/tickets/'+a.id,'PUT',{group_id:null, responder_id:agentId});
+        if(assignRes._httpError) {
+          log.errors.push('Assign #'+a.id+': HTTP '+assignRes._httpError);
+          console.error('  Error assigning #'+a.id+': HTTP '+assignRes._httpError);
+          continue;
+        }
+        const tagRes = await request('/tickets/'+a.id,'PUT',{tags:[...tags, 'ai-triaged', stage]});
+        if(tagRes._httpError) {
+          log.errors.push('Tag #'+a.id+': HTTP '+tagRes._httpError);
+          console.error('  Error tagging #'+a.id+': HTTP '+tagRes._httpError);
+          continue;
+        }
         state.assigned[a.id] = { assignee: a.assignee, stage, time: new Date().toISOString() };
         saveState(state);
         log.assigned.push('#'+a.id+' → '+a.assignee+' ('+stage+')');
@@ -118,7 +149,7 @@ const agentMap = {
 
         // Write draft reply as private note
         if(a.draft_reply){
-          await sleep(400);
+          await sleep(800);
           await request('/tickets/'+a.id+'/notes','POST',{
             body: '<b>[AI Draft Reply]</b><br><br>'+a.draft_reply.replace(/\n/g,'<br>'),
             private: true
@@ -132,10 +163,56 @@ const agentMap = {
     }
   }
 
+  // Step 4: Verify — re-check Freshdesk to confirm changes actually took effect
+  const verifyErrors = [];
+  if(log.closed.length > 0 || log.assigned.length > 0){
+    console.log('\nVerifying on Freshdesk...');
+    // Verify closed tickets
+    for(const ref of log.closed){
+      const tid = ref.match(/#(\d+)/)?.[1];
+      if(!tid) continue;
+      await sleep(500);
+      try {
+        const check = await request('/tickets/'+tid);
+        if(check.status !== 5){
+          verifyErrors.push('Close #' + tid + ': Freshdesk still shows status=' + check.status);
+          // Remove from state so next run retries
+          delete state.closed[tid];
+        }
+      } catch(e) {
+        verifyErrors.push('Verify close #' + tid + ': ' + e.message);
+      }
+    }
+    // Verify assigned tickets
+    for(const ref of log.assigned){
+      const tid = ref.match(/#(\d+)/)?.[1];
+      if(!tid) continue;
+      await sleep(500);
+      try {
+        const check = await request('/tickets/'+tid);
+        if(!check.responder_id || !(check.tags||[]).includes('ai-triaged')){
+          verifyErrors.push('Assign #' + tid + ': resp=' + check.responder_id + ' tags=' + JSON.stringify(check.tags));
+          // Remove from state so next run retries
+          delete state.assigned[tid];
+        }
+      } catch(e) {
+        verifyErrors.push('Verify assign #' + tid + ': ' + e.message);
+      }
+    }
+    if(verifyErrors.length > 0){
+      saveState(state);
+      console.error('\n⚠️ VERIFY FAILED — these changes did NOT apply to Freshdesk:');
+      verifyErrors.forEach(e => console.error('  ' + e));
+    } else {
+      console.log('  ✅ All changes verified on Freshdesk');
+    }
+  }
+
   console.log('\n=== Results ===');
   console.log('Closed: '+log.closed.length);
   console.log('Assigned: '+log.assigned.length);
   console.log('Skipped: '+log.skipped.length);
   console.log('Errors: '+log.errors.length);
+  if(verifyErrors.length) console.log('Verify failures: '+verifyErrors.length);
   if(log.errors.length) console.log('Errors:', log.errors);
 })();
