@@ -25,9 +25,9 @@ def api(method, path, body=None, retries=3):
         print(f"  HTTP {e.code} {method} {path}: {err_body[:200]}", flush=True)
         if e.code == 429:
             retry = int(e.headers.get('Retry-After', 5))
-            print(f"  Rate limited, waiting {retry}s...", flush=True)
+            print(f"  Rate limited, waiting {retry}s... (retrying until success)", flush=True)
             time.sleep(retry)
-            return api(method, path, body, retries)
+            return api(method, path, body, retries)  # 429 retries don't consume the count
         return None
     except (urllib.error.URLError, TimeoutError, OSError) as e:
         if retries > 0:
