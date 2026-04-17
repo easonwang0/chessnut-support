@@ -10,7 +10,7 @@ BASE = f"https://{FD['domain']}/api/v2"
 AUTH = base64.b64encode(f"{FD['api_key']}:X".encode()).decode()
 ctx = ssl.create_default_context()
 
-def api(method, path, body=None):
+def api(method, path, body=None, retries=3):
     url = BASE + path
     data = json.dumps(body).encode() if body else None
     req = urllib.request.Request(url, data=data, method=method)
@@ -27,7 +27,15 @@ def api(method, path, body=None):
             retry = int(e.headers.get('Retry-After', 5))
             print(f"  Rate limited, waiting {retry}s...", flush=True)
             time.sleep(retry)
-            return api(method, path, body)
+            return api(method, path, body, retries)
+        return None
+    except (urllib.error.URLError, TimeoutError, OSError) as e:
+        if retries > 0:
+            wait = (4 - retries) * 5 + 5  # 5s, 10s, 15s backoff
+            print(f"  Timeout/connection error: {e}, retrying in {wait}s ({retries} left)...", flush=True)
+            time.sleep(wait)
+            return api(method, path, body, retries - 1)
+        print(f"  Timeout/connection error (retries exhausted): {e}", flush=True)
         return None
 
 def get(path): return api('GET', path)
