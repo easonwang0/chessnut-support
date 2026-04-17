@@ -10,7 +10,7 @@ BASE = f"https://{FD['domain']}/api/v2"
 AUTH = base64.b64encode(f"{FD['api_key']}:X".encode()).decode()
 ctx = ssl.create_default_context()
 
-def api(method, path, body=None, retries=3):
+def api(method, path, body=None, retries=3, rl_retries=20):
     url = BASE + path
     data = json.dumps(body).encode() if body else None
     req = urllib.request.Request(url, data=data, method=method)
@@ -24,17 +24,20 @@ def api(method, path, body=None, retries=3):
         err_body = e.read().decode()
         print(f"  HTTP {e.code} {method} {path}: {err_body[:200]}", flush=True)
         if e.code == 429:
+            if rl_retries <= 0:
+                print(f"  429 rate limit retries exhausted (20)", flush=True)
+                return None
             retry = int(e.headers.get('Retry-After', 5))
-            print(f"  Rate limited, waiting {retry}s... (retrying until success)", flush=True)
+            print(f"  Rate limited, waiting {retry}s... ({rl_retries} retries left)", flush=True)
             time.sleep(retry)
-            return api(method, path, body, retries)  # 429 retries don't consume the count
+            return api(method, path, body, retries, rl_retries - 1)
         return None
     except (urllib.error.URLError, TimeoutError, OSError) as e:
         if retries > 0:
             wait = (4 - retries) * 5 + 5  # 5s, 10s, 15s backoff
             print(f"  Timeout/connection error: {e}, retrying in {wait}s ({retries} left)...", flush=True)
             time.sleep(wait)
-            return api(method, path, body, retries - 1)
+            return api(method, path, body, retries - 1, rl_retries)
         print(f"  Timeout/connection error (retries exhausted): {e}", flush=True)
         return None
 
