@@ -80,8 +80,8 @@ const agentMap = {
           continue;
         }
         const tags = existing.tags||[];
-        // Truncate reason to 32 chars (Freshdesk tag limit)
-        const reasonTag = (item.reason||'ai-spam').substring(0,32);
+        // Use simple category tag from reason (before first colon/space)
+        const reasonTag = (item.reason||'spam').split(/[:\s]/)[0].substring(0,20);
         const closeRes = await request('/tickets/'+item.id,'PUT',{
           status:5, group_id:null,
           tags:[...tags, 'auto-spam-closed', reasonTag]

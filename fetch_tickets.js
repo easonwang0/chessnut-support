@@ -8,13 +8,40 @@ const AUTH = 'Basic ' + Buffer.from(API_KEY + ':X').toString('base64');
 const PROTECTED = [150000414285,150000414284,150000414287,150000414286];
 const CS_GROUP = 150000248275;
 
-function request(path, method, data) {
+function request(path, method, data, retries) {
+  retries = retries || 0;
   return new Promise((resolve, reject) => {
     const req = https.request({ hostname: DOMAIN, path: '/api/v2'+path, method: method||'GET',
-      headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' }
+      headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' },
+      timeout: 30000
     }, res => { let body=''; res.on('data', c => body+=c);
-      res.on('end', () => { try{resolve(body?JSON.parse(body):{})}catch(e){resolve({error:true})} }); });
-    req.on('error', reject); if(data) req.write(JSON.stringify(data)); req.end();
+      res.on('end', async () => {
+        if(res.statusCode === 429 && retries < 5) {
+          const wait = Math.pow(2, retries) * 2000;
+          console.log('    Rate limited (429), retrying in '+wait+'ms...');
+          await sleep(wait);
+          try { resolve(await request(path, method, data, retries+1)); } catch(e) { reject(e); }
+          return;
+        }
+        if(res.statusCode >= 500 && retries < 3) {
+          const wait = Math.pow(2, retries) * 1000;
+          console.log('    Server error ('+res.statusCode+'), retrying in '+wait+'ms...');
+          await sleep(wait);
+          try { resolve(await request(path, method, data, retries+1)); } catch(e) { reject(e); }
+          return;
+        }
+        try{resolve(body?JSON.parse(body):{})}catch(e){resolve({error:true})}
+      }); });
+    req.on('timeout', () => { req.destroy(); reject(new Error('Request timeout (30s)')); });
+    req.on('error', async (e) => {
+      if(retries < 3) {
+        const wait = Math.pow(2, retries) * 1000;
+        console.log('    Network error, retrying in '+wait+'ms: '+e.message);
+        await sleep(wait);
+        try { resolve(await request(path, method, data, retries+1)); } catch(e2) { reject(e2); }
+      } else { reject(e); }
+    });
+    if(data) req.write(JSON.stringify(data)); req.end();
   });
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
