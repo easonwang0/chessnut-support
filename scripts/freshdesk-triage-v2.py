@@ -128,12 +128,12 @@ def classify(subj, desc, convs):
         return ('A','2-dispute-jony',AGENTS['jony'],'Platform dispute')
     if re.search(r'youtube|tiktok.*(collab|partner)|sponsorship|media.*(review|interview)|affiliate|推广|合作|博主|left a .+ star review', fl):
         return ('B','5-kol-jony',AGENTS['jony'],'KOL/Brand/Review')
-    product_sig = re.search(r'not working|broken|defect|malfunction|error|bug|crash|freeze|won.t turn|doesn.t work|issue|problem|trouble|故障|问题|damage|warranty|repair|fix', fl)
+    product_sig = re.search(r'not working|broken|defect|malfunction|error|bug|crash|crashing|freeze|freezing|won.t turn|doesn.t work|not respond|no response|issue|problem|trouble|故障|问题|damage|warranty|repair|fix', fl)
     has_ctx = re.search(r'evo|move|air|pro|go|chessnut|board|chess|serial|firmware|app|bluetooth|wifi|charge|battery', fl)
     defect_ret = re.search(r'(return|refund|退货|退款).*(defect|broken|not working|fault|故障|坏了|damage)', fl)
     
     # Move-specific symptoms (only Move has motorized pieces)
-    move_symptoms = re.search(r'pieces? always on|battery deplet|charging pad|squeak|click.*piece|piece.*moved.*(by itself|overnight|own)|piece.*twitch', fl)
+    move_symptoms = re.search(r'pieces? always on|battery deplet|charging pad|squeak|click.*piece|piece.*mov|mov.*piece|piece.*twitch|powered off.*piece|piece.*powered off', fl)
     
     if (product_sig and has_ctx) or defect_ret or move_symptoms:
         if re.search(r'\bmove\b|auto.*(chess|piece|robot)', fl) or move_symptoms: return ('C','3-product-gwen',AGENTS['gwen'],'Move product issue')
