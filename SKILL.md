@@ -38,6 +38,8 @@ This skill defines the autonomous actions for handling incoming Freshdesk suppor
     - Reviews: "left a X star review for"
     - TikTok: verification codes
   - **Execution**: Close the ticket immediately without responding (status: 5). Apply tag `auto-spam-closed` (sender-based gets `sender-based` tag too).
+- **⚠️ Exception**: `@shopify.com` and `@fuuffy.com` are NOT auto-closed. Content is checked first against whitelist patterns. Only close if no business match found.
+- **⚠️ Whitelist check runs BEFORE any sender-based close**. Business-critical content (complaint notices, payment confirmations, logistics alerts, fraud alerts) is never closed regardless of sender.
 
 ## 2. Technical Troubleshooting & Auto-Drafting (Optimized)
 - **CRITICAL RULE**: Do NOT use generic troubleshooting templates unless the specific product and issue are confirmed. Always ask for evidence first if it's a hardware/defect claim.

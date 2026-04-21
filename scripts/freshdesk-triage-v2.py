@@ -45,16 +45,44 @@ def get(path): return api('GET', path)
 def put(path, b): return api('PUT', path, b)
 def post(path, b): return api('POST', path, b)
 
+# ---- Layer 0: Content whitelist (checked BEFORE sender-based close) ----
+# These patterns indicate legitimate business content that must NOT be auto-closed,
+# even if the sender matches a spam pattern.
+WHITELIST_PATTERNS = [
+    # Shopify complaint notices → Jony
+    (re.compile(r'customer complaint notice|customer.*has identified an issue', re.I),
+     'A', '2-dispute-jony', None, 'Shopify complaint notice'),
+    # Shopify "Balance paid for order" → Jennifer
+    (re.compile(r'balance paid for order', re.I),
+     'D', '4-order-lena', None, 'Balance paid notification'),
+    # Fuuffy logistics delay alerts → Lena
+    (re.compile(r'運單派送延誤|派送延誤|shipment stuck|delivery delay', re.I),
+     'D', '4-order-lena', None, 'Fuuffy logistics delay'),
+    # Payoneer fraud alerts → Jony
+    (re.compile(r'可疑交易|fraud.*alert|防欺诈|suspicious.*transaction', re.I),
+     'A', '2-dispute-jony', None, 'Payoneer fraud alert'),
+]
+
+def check_whitelist(subj, desc, convs):
+    """Check if content matches whitelist patterns. Returns (intent, tag, agent_id, desc) or None."""
+    full = f"{subj}\n{desc}\n" + ' '.join((c.get('body_text','') or '') for c in convs)
+    for pattern, intent, tag, agent_key, desc in WHITELIST_PATTERNS:
+        if pattern.search(full):
+            agent_id = AGENTS.get(agent_key) if agent_key else None
+            return (intent, tag, agent_id, desc)
+    return None
+
 # ---- Layer 1: Spam patterns ----
+# NOTE: @shopify.com and @fuuffy.com are NOT here because they need content-based checks.
+# They are handled by LAYER1_SHOPIFY and LAYER1_FUUFFY below.
 SPAM = [re.compile(p, re.I) for p in [
-    r'@mailer\.shopify\.com', r'@shopifyemail\.com',
+    r'@shopifyemail\.com',
     r'donotreply@amazon\.com', r'noreply@amazon\.com',
     r'@marketplace\.amazon\.', r'@sellernotifications\.',
     r'fba-noreply@amazon\.com',
     r'@facebookmail\.com', r'@business-updates\.facebook\.com',
     r'@mail\.instagram\.com', r'@instagram\.com',
     r'@mailchimp\.com', r'@mandrillapp\.com',
-    r'@fuuffy\.com',
     r'@impact\.com', r'notifications@app\.impact\.com',
     r'@paypal\.com',
     r'@pplcz\.com', r'@ppl-pk\.com',
@@ -66,6 +94,11 @@ SPAM = [re.compile(p, re.I) for p in [
     r'@mailer\.', r'@notifications\.', r'@bounce\.',
 ]]
 SPAM_EX = [re.compile(r'no-reply@mailsupport\.aliyun\.com', re.I)]
+
+# Shopify sender patterns — NOT auto-close, content must be checked first
+SHOPIFY_SENDERS = re.compile(r'@mailer\.shopify\.com|@shopify\.com', re.I)
+# Fuuffy sender patterns — NOT auto-close, content must be checked first
+FUUFFY_SENDERS = re.compile(r'@fuuffy\.com', re.I)
 TAGS_SKIP = {'auto-spam-closed','2-dispute-jony','3-product-gwen','3-product-jennifer',
              '4-order-lena','5-kol-jony','5-fallback-jennifer','ai-draft-ready'}
 AGENTS = FD['agents']
@@ -98,14 +131,26 @@ def classify(subj, desc, convs):
     product_sig = re.search(r'not working|broken|defect|malfunction|error|bug|crash|freeze|won.t turn|doesn.t work|issue|problem|trouble|故障|问题|damage|warranty|repair|fix', fl)
     has_ctx = re.search(r'evo|move|air|pro|go|chessnut|board|chess|serial|firmware|app|bluetooth|wifi|charge|battery', fl)
     defect_ret = re.search(r'(return|refund|退货|退款).*(defect|broken|not working|fault|故障|坏了|damage)', fl)
-    if (product_sig and has_ctx) or defect_ret:
-        if re.search(r'\bmove\b|auto.*(chess|piece|robot)', fl): return ('C','3-product-gwen',AGENTS['gwen'],'Move product issue')
+    
+    # Move-specific symptoms (only Move has motorized pieces)
+    move_symptoms = re.search(r'pieces? always on|battery deplet|charging pad|squeak|click.*piece|piece.*moved.*(by itself|overnight|own)|piece.*twitch', fl)
+    
+    if (product_sig and has_ctx) or defect_ret or move_symptoms:
+        if re.search(r'\bmove\b|auto.*(chess|piece|robot)', fl) or move_symptoms: return ('C','3-product-gwen',AGENTS['gwen'],'Move product issue')
         if re.search(r'\bevo\b|ce\d|built-in.*(screen|ai)', fl): return ('C','3-product-gwen',AGENTS['gwen'],'EVO product issue')
         if re.search(r'\bair\b|\bpro\b|\bgo\b', fl): return ('C','3-product-jennifer',AGENTS['jennifer'],'Air/Pro/Go product issue')
         return ('C','3-product-jennifer',AGENTS['jennifer'],'Product issue (model unclear)')
-    if re.search(r'order|shipping|delivery|tracking|cancel|refund|return|invoice|receipt|dispatch|发货|物流|订单|取消|退款|退货|发票|price|wholesale|product.*compar|选购|对比|库存|stock|pre.?order|shipment|warehouse|delivery|courier|tracking', fl):
+    
+    # Order/logistics/presales
+    has_order_num = re.search(r'order\s*#?\s*\d{4,6}', fl)
+    order_logistics_kw = re.search(r'shipping status|tracking|delivery status|when.*(ship|deliver|arrive)|where.*order|has.*shipped|dispatch|cancel.*order|refund.*order|return.*order|invoice|receipt|发货|物流|订单|取消|退款|退货|发票', fl)
+    presales_kw = re.search(r'how long.*get|when.*stock|eta|price|wholesale|product.*compar|选购|对比|库存|stock|pre.?order', fl)
+    
+    if has_order_num or order_logistics_kw:
         if not defect_ret:
-            return ('D','4-order-lena',AGENTS['lena'],'Order/logistics/presales')
+            return ('D','4-order-lena',AGENTS['lena'],'Order/logistics')
+    if presales_kw and not product_sig:
+        return ('D','4-order-lena',AGENTS['lena'],'Presales inquiry')
     if re.search(r'notification of payment|ad.*approved|copyright|video.*removed|policy.*update', fl):
         return ('E','auto-spam-closed',None,'System notification')
     return ('F','5-fallback-jennifer',AGENTS['jennifer'],'Fallback')
@@ -210,13 +255,76 @@ def main():
                 req_count += 1
             print(f'  Email: {email or "unknown"}', flush=True)
 
-            # Layer 1: Sender filter
-            if is_spam(email):
-                print(f'  L1 → SPAM closed', flush=True)
+            # Layer 0.5: Read conversation early (needed for whitelist + content checks)
+            convs = get(f'/tickets/{tid}/conversations') or []
+            req_count += 1
+            time.sleep(0.3)
+
+            subj = t.get('subject','')
+
+            # Layer 0: Content whitelist — checked BEFORE any sender-based close
+            wl = check_whitelist(subj, t.get('description',''), convs)
+            if wl:
+                intent, tag, agent_id, desc = wl
+                agent_name = AGENT_NAMES.get(agent_id, 'Jennifer Chen') if agent_id else 'Jennifer Chen'
+                # Default to Jennifer if whitelist didn't specify agent
+                if not agent_id:
+                    agent_id = AGENTS['jennifer']
+                print(f'  L0 → WHITELIST: {desc} → {agent_name}', flush=True)
+                d = make_draft(subj, t.get('description',''), convs, intent, tag, agent_name)
+                post(f'/tickets/{tid}/notes', {'body':d, 'private':True})
+                req_count += 1
+                time.sleep(0.5)
+                all_tags = list(set(t.get('tags',[]) + [tag, 'ai-draft-ready']))
+                put(f'/tickets/{tid}', {
+                    'responder_id': agent_id,
+                    'group_id': None,
+                    'tags': all_tags,
+                })
+                req_count += 1
+                report['processed'].append({
+                    'id':tid, 'subject':subj, 'email':email,
+                    'layer':0, 'action':'assigned', 'tag':tag,
+                    'agent':agent_name, 'agentId':agent_id,
+                    'intent':intent, 'reason':f'Whitelist: {desc}'
+                })
+                time.sleep(0.5)
+                continue
+
+            # Layer 1a: Shopify sender — content check before close
+            if SHOPIFY_SENDERS.search(email or ''):
+                # Already checked whitelist above. If no whitelist match → close as notification
+                print(f'  L1a → Shopify notification (no whitelist match) → closed', flush=True)
                 put(f'/tickets/{tid}', {'status':5, 'tags':list(set(t.get('tags',[])+['auto-spam-closed'])), 'group_id':None})
                 req_count += 1
                 report['processed'].append({
-                    'id':tid, 'subject':t.get('subject',''), 'email':email,
+                    'id':tid, 'subject':subj, 'email':email,
+                    'layer':1, 'action':'closed', 'tag':'auto-spam-closed',
+                    'agent':None, 'reason':f'Shopify notification (no whitelist match): {email}'
+                })
+                time.sleep(0.5)
+                continue
+
+            # Layer 1b: Fuuffy sender — content check before close
+            if FUUFFY_SENDERS.search(email or ''):
+                print(f'  L1b → Fuuffy notification (no whitelist match) → closed', flush=True)
+                put(f'/tickets/{tid}', {'status':5, 'tags':list(set(t.get('tags',[])+['auto-spam-closed'])), 'group_id':None})
+                req_count += 1
+                report['processed'].append({
+                    'id':tid, 'subject':subj, 'email':email,
+                    'layer':1, 'action':'closed', 'tag':'auto-spam-closed',
+                    'agent':None, 'reason':f'Fuuffy notification (no whitelist match): {email}'
+                })
+                time.sleep(0.5)
+                continue
+
+            # Layer 1c: Generic spam sender filter
+            if is_spam(email):
+                print(f'  L1c → SPAM closed', flush=True)
+                put(f'/tickets/{tid}', {'status':5, 'tags':list(set(t.get('tags',[])+['auto-spam-closed'])), 'group_id':None})
+                req_count += 1
+                report['processed'].append({
+                    'id':tid, 'subject':subj, 'email':email,
                     'layer':1, 'action':'closed', 'tag':'auto-spam-closed',
                     'agent':None, 'reason':f'Spam sender: {email}'
                 })
@@ -224,7 +332,6 @@ def main():
                 continue
 
             # Also check subject-only patterns for L1
-            subj = t.get('subject','')
             if re.search(r'Amazon has shipped your sold item', subj, re.I):
                 print(f'  L1 → Amazon seller notification closed', flush=True)
                 put(f'/tickets/{tid}', {'status':5, 'tags':list(set(t.get('tags',[])+['auto-spam-closed'])), 'group_id':None})
@@ -236,11 +343,6 @@ def main():
                 })
                 time.sleep(0.5)
                 continue
-
-            # Layer 2: Read conversation + classify
-            convs = get(f'/tickets/{tid}/conversations') or []
-            req_count += 1
-            time.sleep(0.3)
 
             intent, tag, agent_id, desc = classify(
                 t.get('subject',''), t.get('description',''), convs)

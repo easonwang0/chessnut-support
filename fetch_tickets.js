@@ -53,12 +53,12 @@ async function getEmail(t){
 function extractText(t){let b=t.description_text||'';if(!b&&t.description)b=t.description.replace(/<[^>]+>/g,' ');return b.replace(/\s+/g,' ').trim();}
 
 const isSender = (email) =>
-  /^no-reply@mailer\.shopify\.com$/i.test(email)||/@mailer\.shopify\.com$/i.test(email)||/@shopify\.com$/i.test(email)||
-  /^no-reply@shopify$/i.test(email)||/^noreply@shopify/i.test(email)||
+  // NOTE: @mailer.shopify.com and @fuuffy.com removed — need content-based check
+  /@shopifyemail\.com$/i.test(email)||
   /@mailchimp\.com$/i.test(email)||/@mandrillapp\.com$/i.test(email)||
   /@facebookmail\.com$/i.test(email)||
   /@support\.facebook\.com$/i.test(email)||/@business\.facebook\.com$/i.test(email)||
-  /@fuuffy\.com$/i.test(email)||/@pplcz\.com$/i.test(email)||/@ppl-pk\.com$/i.test(email)||
+  /@pplcz\.com$/i.test(email)||/@ppl-pk\.com$/i.test(email)||
   /@marketplace\.amazon/i.test(email)||
   /@amazon\.com$/i.test(email)&&/no-reply|noreply|donotreply|do-not-reply/i.test(email)||
   /@sellernotifications/i.test(email)||/@sellernotifications\.amazon/i.test(email)||
@@ -74,14 +74,36 @@ const isSender = (email) =>
   /@noreply\./i.test(email)||/@no-reply\./i.test(email)||/@donotreply\./i.test(email)||
   /^donotreply@/i.test(email)||/^do-not-reply@/i.test(email)||
   /^no-reply@/i.test(email)&&!/mailsupport\.aliyun/i.test(email)||/^noreply@/i.test(email)||
-  /@mailer\./i.test(email)||/@notifications?\./i.test(email)||/@system\./i.test(email)||
+  /@mailer\./i.test(email)&&!/shopify/i.test(email)||
+  /@notifications?\./i.test(email)||/@system\./i.test(email)||
   /@automated\./i.test(email)||/@bounce\./i.test(email);
+
+// Shopify sender — needs content check, not auto-close
+const isShopifySender = (email) => /@mailer\.shopify\.com|@shopify\.com/i.test(email);
+// Fuuffy sender — needs content check, not auto-close
+const isFuuffySender = (email) => /@fuuffy\.com/i.test(email);
+
+// Content whitelist — business-critical patterns that should NOT be closed
+const contentWhitelist = (text, subject) => {
+  const full = (subject + ' ' + text).toLowerCase();
+  if (/customer complaint notice|customer.*has identified an issue/.test(full))
+    return { reason: 'shopify-complaint', assignee: 'JONY' };
+  if (/balance paid for order/.test(full))
+    return { reason: 'balance-paid', assignee: 'JENNIFER' };
+  if (/運單派送延誤|派送延誤|shipment stuck|delivery delay/.test(full))
+    return { reason: 'logistics-delay', assignee: 'LENA' };
+  if (/可疑交易|fraud.*alert|防欺诈|suspicious.*transaction/.test(full))
+    return { reason: 'payoneer-fraud', assignee: 'JONY' };
+  return null;
+};
 
 const isContentSpam = (text) => {
   if(/notification of payment received/i.test(text)||/has authorized a payment to you/i.test(text)||/您收到了一笔付款/i.test(text)) return true;
   if(/amazon hat (ihre|seine)|amazon.*versendet/i.test(text)||/amazon has shipped your sold/i.test(text)) return true;
   if(/refund initiated.*order\s*112-/i.test(text)||/速卖通.*通知|违背发货承诺/i.test(text)) return true;
-  if(/運單.*派送延誤|運單.*差價.*追收/i.test(text)||/public terms application/i.test(text)) return true;
+  // NOTE: Fuuffy delay removed — handled by whitelist, not spam
+  if(/運單.*差價.*追收/i.test(text)) return true; // Fuuffy price diff only
+  if(/public terms application/i.test(text)) return true;
   if(/mailchimp.*(audience.*export|account is closed)/i.test(text)) return true;
   if(/你的 facebook 视频无法|你的广告已通过审核/i.test(text)) return true;
   if(/left a \d star review/i.test(text)||/partner has been deactivated/i.test(text)) return true;
@@ -136,7 +158,35 @@ const isContentSpam = (text) => {
     const body = extractText(t);
     const subject = t.subject||'';
 
-    // L1: sender-based spam → close
+    // L0: Content whitelist check — BEFORE any sender-based close
+    const wl = contentWhitelist(subject+' '+body, subject);
+    if(wl){
+      // Whitelisted — send to AI analysis, don't close
+      await sleep(300);
+      const full = await request('/tickets/'+t.id);
+      const fullBody = extractText(full);
+      results.push({
+        id: t.id,
+        subject: subject,
+        body: fullBody.substring(0, 2000),
+        requester_email: email,
+        tags: [...(t.tags||[]), 'wl:'+wl.reason],
+        _whitelist: wl
+      });
+      continue;
+    }
+
+    // L1a: Shopify sender — content already checked above, close if no whitelist match
+    if(email && isShopifySender(email)){
+      toClose.push({id:t.id, reason:'sender-spam', email});
+      continue;
+    }
+    // L1b: Fuuffy sender — content already checked above, close if no whitelist match
+    if(email && isFuuffySender(email)){
+      toClose.push({id:t.id, reason:'sender-spam', email});
+      continue;
+    }
+    // L1c: generic sender-based spam → close
     if(email && isSender(email)){
       toClose.push({id:t.id, reason:'sender-spam', email});
       continue;

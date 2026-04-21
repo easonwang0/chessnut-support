@@ -31,16 +31,30 @@
 
 ### 第1层：系统通知过滤 → 自动关闭
 
+**执行顺序：先白名单检查，再黑名单关闭**
+
+**白名单检查（Layer 0）— 在所有 sender-based 关闭之前执行：**
+即使发件人匹配了下面的关闭规则，如果内容包含以下关键词，**不关闭**，进入正常分诊流程：
+
+| 内容关键词 | 指派 | Tag |
+|-----------|------|-----|
+| "customer complaint notice" / "has identified an issue" | **Jony** | `shopify-complaint` |
+| "Balance paid for order" | **Jennifer** | `balance-paid` |
+| "運單派送延誤" / "shipment stuck" / "delivery delay" | **Lena** | `logistics-delay` |
+| "可疑交易" / "fraud alert" / "防欺诈" / "suspicious transaction" | **Jony** | `payoneer-fraud` |
+
 **按发件人关闭（Layer 1a）：**
+
+⚠️ `@shopify.com` 和 `@fuuffy.com` **不再直接关闭** — 先过白名单检查，无业务匹配才关闭。
 
 | 发件人 | 处理 |
 |--------|------|
-| `@mailer.shopify.com` / `@shopify.com`（含 Shopify Inbox `no-reply@mailer.shopify.com`） | 关闭 |
+| `@mailer.shopify.com` / `@shopify.com` | 先检查白名单 → 无匹配则关闭 |
+| `@fuuffy.com` | 先检查白名单 → 无匹配则关闭 |
 | `donotreply@amazon.com` / `@amazon.*` noreply | 关闭 |
 | `@marketplace.amazon.*` / `@sellernotifications.*` | 关闭 |
 | `noreply@facebookmail.com` / `@facebookmail.com` | 关闭 |
 | `@mailchimp.com` / `@mandrillapp.com` | 关闭 |
-| `@fuuffy.com` | 关闭 |
 | `@impact.com` / `@mediapartners` | 关闭 |
 | `@paypal.com` (noreply/service，非争议) | 关闭 |
 | `@pplcz.com` / `@ppl-pk.com` | 关闭 |
@@ -55,7 +69,7 @@
 - "Notification of payment received" / "has authorized a payment to you"
 - Amazon 多语言通知（德语/意大利语/西班牙语/法语/芬兰语）
 - 速卖通：违背发货承诺、订单关闭、订单已通过风控审核
-- Fuuffy：運單派送延誤、訂單收據、訂單確認
+- Fuuffy：訂單收據、訂單確認（⚠️ **"運單派送延誤" 不关闭，走白名单转 Lena**）
 - Facebook：你的广告已通过审核、视频无法显示
 - "left a X star review for"（评价通知）
 - Payoneer 收款通知
@@ -69,7 +83,11 @@
 - Payoneer 争议/chargeback
 - 速卖通纠纷
 
-**操作：** group_id=null, responder_id=Jony
+**操作：** group_id=null, responder_id=Jony，**status 保持 open（不自动关闭）**，只写 draft 不关单
+
+**Move 专属症状关键词（直接匹配 Gwen，不需要产品名）：**
+- "pieces always on"、"battery depletes"、"charging pad"
+- "squeaking/clicking pieces"、"pieces moved by themselves/overnight"
 
 ### 第3层：产品咨询 → Gwen Liu / Jennifer Chen
 
@@ -89,19 +107,18 @@
 
 ### 第4层：订单/物流 → Lena Wang
 - 订单查询（含订单号、purchase number）
-- 发货时间、物流跟踪
+- 发货时间、物流跟踪（有订单号）
 - 取消订单、退款
 - 修改地址
 - 发票
 - 保修/配送咨询
 - 缺少物品
 - 催发货
-- 售前咨询（价格、运费、退货政策）
-- 产品功能介绍
+- **售前咨询**（无订单号：价格、运费、退货政策、库存、ETA）→ 也给 Lena
 
-**操作：** group_id=null, responder_id=Lena
+**关键区分：有无订单号不影响指派 — 物流/购买类问题一律给 Lena**
 
-### 第5层：KOL/合作 → Jennifer Chen
+### 第4层：KOL/合作 → Jennifer Chen
 - YouTube / TikTok / 社交媒体合作
 - Influencer / KOL 请求
 - 赞助请求
@@ -131,6 +148,10 @@
 ### 执行窗口
 - 定时任务每8小时执行，回溯窗口9小时（1小时重叠避免漏筛）
 - 已处理的工单（有 triage tag 或 status=5）自动跳过
+
+### Duplicate 检测
+- **不自动做 duplicate 关闭** — 容易误杀转发了订单确认的客户新邮件
+- 除非 requester 完全相同 + content 高度相似，否则不判 duplicate
 
 ### 不确定的处理
 - 不要自己猜测，先查联系人邮箱和工单内容
